@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Register</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="{% static 'login/images/icons/favicon.ico' %}" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+		integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css"
+		href="{% static 'login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/css-hamburgers/hamburgers.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/select2/select2.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/css/main.css' %}">
+</head>
+
+<body>
+
+	<!-- <div class="row justify-content-center" style="background-color: cornflowerblue;">
+		 -->
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-50 p-r-50 p-t-40 p-b-30">
+				<form class="login100-form validate-form" method="POST">
+					<span class="login100-form-title p-b-20">
+						Register
+					</span>
+					{% csrf_token %}
+
+					<!-- firstname -->
+					<div class="wrap-input100 validate-input m-b-3" style="padding:10px">
+						{{form.first_name}}
+						<span class="focus-input100" value= "{{form.first_name.value}}"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-users"></span>
+						</span>
+					</div>
+					<!-- last_name -->
+					<div class="wrap-input100 validate-input m-b-3" style="padding:10px">
+						{{form.last_name}}
+						<span class="focus-input100" value="{{form.last_name.value}}"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-users"></span>
+						</span>
+					</div>
+					<!-- username -->
+					<div class="wrap-input100 validate-input m-b-3" style="padding:10px">
+						{{form.username}}
+						<span class="focus-input100" value="{{form.username.value}}"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-user"></span>
+						</span>
+					</div>
+
+					<!-- email -->
+					<div class="wrap-input100 validate-input m-b-3" style="padding:10px"
+						data-validate="Valid email is required: ex@abc.xyz">
+						{{form.email}}
+						<span class="focus-input100" value="{{form.email.value}}"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-envelope"></span>
+						</span>
+					</div>
+
+
+					<!-- password 1 -->
+					<div class="wrap-input100 validate-input m-b-3" style="padding:10px"
+						data-validate="Password is required">
+						{{form.password1}}
+						<span class="focus-input100" value="{{form.password1.value}}"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-lock"></span>
+						</span>
+
+					</div>
+					<div class="contact100-form-checkbox m-l-4">
+						<input class="input-checkbox100" id="ckb1" type="checkbox" onclick="myFunction()"
+							name="remember-me">
+						<label class="label-checkbox100" for="ckb1">
+							Show Password
+						</label>
+					</div>
+
+					<!-- password2 -->
+					<div class="wrap-input100 validate-input m-b-3" style="padding:10px"
+						data-validate="Password is required">
+						{{form.password2}}
+						<span class="focus-input100" value="{{form.password2.value}}"></span>
+						<span class="symbol-input100">
+							<span class="lnr lnr-lock"></span>
+						</span>
+					</div>
+					<div class="container-login100-form-btn p-t-25" style="padding:10px">
+						<button class="login100-form-btn" value="Register Account">
+							Register
+						</button>
+					</div>
+					<div class="text-center w-full p-t-0">
+						<span>
+							You have an account?
+						</span>
+						<a href="{% url 'login' %}">
+							Sign in now
+						</a>
+					</div>
+				</form>
+			</div>
+			{{form.errors}}
+		</div>
+	</div>
+	<script>
+		function myFunction() {
+			var x = document.getElementById("myInput");
+			if (x.type === "password") {
+				x.type = "text";
+			} else {
+				x.type = "password";
+			}
+		}
+	</script>
+
+
+
+
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/select2/select2.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/js/main.js' %}"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+		crossorigin="anonymous"></script>
+
+</body>
+
+</html>

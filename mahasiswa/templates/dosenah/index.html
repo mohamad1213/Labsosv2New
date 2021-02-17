@@ -1,49 +1,104 @@
 {% extends "base_dosen.html" %}
-
 {% block content %}
-<div id="layoutSidenav_content">
-  <main>
-    <div class="container-fluid">
-      <h1 class="mt-4" style="text-align: center;">Data PKL</h1>
-      <ol class="breadcrumb mb-4">
-      </ol>
-      <div class="card-body">
-        <!-- <a type="submit" href="/mahasiswas/input"><button class="btn btn-primary mb-4">Tambah</button></a> -->
-        <div class="table-responsive">
-          <table class="table table-hover" id="" width="100%" cellspacing="2">
-            <thead>
-              <tr style="background-color: #625f53; color: aliceblue;">
-                <th>No</th>
-                <th>Nim</th>
-                <th>Judul</th>
-                <th>Nama Mitra</th>
-                <th>Dosen Pembimbing</th>
-                <th>Tanggal Pelaksanaan</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            {% for d in data %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{d.owner}}</td>
-              <td><a href="/dosenah/{{d.id}}">{{d.judul}}</a></td>
-              <td>{{d.nama_mitra}}</td>
-              <td>{{d.nama_dosen}}</td>
-              <td>{{d.tanggal_mulai}} - {{d.tanggal_selesai}}</td>
-              <td>
-                {% if d.approve == True %}
-                <span class="text-success" >Approved</span>
-                {% else %}
-                <span class="text-warning" >Process</span>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </table>
-          
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-success text-white mr-2">
+      <i class="mdi mdi mdi-account-check"></i>
+    </span> Data Peserta Labsos </h3>
+</div>
+<div class="row" style="margin-top: 5%;">
+  <!-- <button type="button" class="btn-primary" onclick="history.back();">
+    <i class="fas fa-arrow-left"></i> Previous
+  </button> -->
+  <div class="table-responsive">
+    <table class="table table-hover" id="" width="100%" cellspacing="2">
+      <thead>
+        <tr style="background-color: #625f53; color: aliceblue">
+          <th>No</th>
+          <th>Nim</th>
+          <th>Judul</th>
+          <th>Nama Mitra</th>
+          <th>Tanggal Pelaksanaan</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      {% for d in data %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{d.owner}}</td>
+        <td><a href="/dosenah/{{d.id}}">{{d.judul}}</a></td>
+        <td>{{d.nama_mitra}}</td>
+        <td>{{d.tanggal_mulai}} - {{d.tanggal_selesai}}</td>
+        <td>
+          {% if d.approve == True %}
+          <span class="text-success">Approved</span>
+          {% elif d.approve == False and d.reject == True %}
+          <span class="text-danger">Reject</span>
+          {% elif d.reject == False and d.approve == False %}
+          <span class="text-warning">Process</span>
+          {% endif %}
+        </td>
+        <td>
+          <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon" data-toggle="modal"
+            data-target="#delete-{{d.id}}">
+            <i class="mdi mdi-delete"></i></button>
+        </td>
+      </tr>
+      <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="delete">Delete Data Peserta Labsos</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-body">
+                <p> Do You want To delete
+                  <strong>{{d.judul}}</strong>?</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
+                No
+              </button>
+              <a href="/dosenah/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+      <!-- Modal reject -->
+      <div class="modal fade" id="reject-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="input">Reject</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="/mahasiswas/{{d.id}}/reject/" method="post" class="mt-3" enctype="multipart/form-data">
+                {% load crispy_forms_tags %}
+                {% csrf_token %}
+                {{ form_reject|crispy }}
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" href=/mahasiswas/{{d.id}}/reject/ class="btn btn-warning">
+                    <i class="fas fa-minus-circle"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </table>
+  </div>
 </div>
 {% endblock %}

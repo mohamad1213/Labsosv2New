@@ -1,0 +1,149 @@
+{% extends "base_dosen.html" %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 5px;">
+  <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i>
+    Preview</button>
+  <h1 class="mt-4 mb-4" style="text-align: center;">Daily Report</h1>
+  <div class="row">
+    <div class="col" style="padding: 0; ">
+      <div class="card-body">
+        <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal" data-target="#tambah"
+          style="background-color:rgb(255, 214, 0); color: black;">
+          <span><span>&#43;</span><b> T U L I S </b></span>
+        </button>
+        <div class="table-responsive">
+          {% regroup data by week as catatan_weekly %}
+
+          {% for catatan in catatan_weekly %}
+          <!-- {{catatan}} -->
+          <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="false">
+
+            <!-- Accordion card -->
+            <div class="card">
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="heading-{{d.id}}" style="background-color: #625f53;">
+                <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse-{{d.id}}" aria-expanded="false"
+                  aria-controls="collapse-{{d.id}}">
+                  <h5 class="mb-0">
+                    <div class="row" style="color: white; font-size: medium;">
+                      <div class="col-sm-6">Hari ke-{{forloop.counter}}</div>
+                    </div>
+                  </h5>
+                </a>
+              </div>
+              <div id="collapse-{{d.id}}" class="collapse show" role="tabpanel" aria-labelledby="heading-{{d.id}}"
+                data-parent="#accordionEx">
+                <table class="table table-hover table-borderless" id="" width="100%" cellspacing="0">
+                  {% for d in catatan.list %}
+                  <tr data-toggle="modal" data-target="#detail-{{d.id}}">
+                    <td>{{forloop.counter}}</td>
+                    <td>{{d.waktu}}</td>
+                    <td>{{d.judul}}</td>
+                    <td>
+                      {% for img_obj in d.catatan.all %}
+                      <a href="{{img_obj}}">File {{forloop.counter}}</a>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <!-- Modal Detail -->
+                  <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="detail">Detail Data</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <dd><i>{{d.waktu}}</i></dd>
+                          <dt>{{d.judul}}</dt>
+                          <p>{{d.ket}}</p>
+                          {% for d in d.catatan.all %}
+                          <div class="col-12" style="text-align: center;"><img src="{{d}}" width="100%">
+                            <a href="{{d}}">File {{forloop.counter}}</a>
+                          </div>
+                          {% endfor %}
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#delete-{{d.id}}">
+                            <i class="fas fa-trash-alt"></i></i></button>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- modal delete -->
+                  <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="modal-body">
+                            <p> Do You want To delete
+                              <strong>{{d.id}}</strong>?</p>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
+                            No
+                          </button>
+                          <a href="/catatan/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Modal input -->
+        <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="input">Tambah Catatan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="" method="post" class="mt-3" enctype="multipart/form-data">
+                  {% load crispy_forms_tags %}
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                  {{ form_catatan|crispy }}
+                  {{ form_gambar|crispy }}
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Input</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}

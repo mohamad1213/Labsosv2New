@@ -1,71 +1,90 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-    
+<html lang="en">
+
 <head>
-	<title>Login</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>SIM-LABSOS</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-	<style>
-		body,
-		html {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			background: #7abecc !important;
-		}
-		.user_card {
-			width: 350px;
-			margin-top: auto;
-			margin-bottom: auto;
-			background: #74cfbf;
-			position: relative;
-			display: flex;
-			justify-content: center;
-			flex-direction: column;
-			padding: 10px;
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			border-radius: 5px;
-
-		}
-
-		.form_container {
-			margin-top: 20px;
-		}
-
-		#form-title{
-			color: #fff;
-		}
-		.login_btn {
-			width: 100%;
-			background: #33ccff !important;
-			color: white !important;
-		}
-		.login_btn:focus {
-			box-shadow: none !important;
-			outline: 0px !important;
-		}
-		.login_container {
-			padding: 0 2rem;
-		}
-		.input-group-text {
-			background: #f7ba5b !important;
-			color: white !important;
-			border: 0 !important;
-			border-radius: 0.25rem 0 0 0.25rem !important;
-		}
-		.input_user,
-		.input_pass:focus {
-			box-shadow: none !important;
-			outline: 0px !important;
-		}
-
-	</style>
-
+	<!-- plugins:css -->
+	<link rel="stylesheet" href="{% static 'css/assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/assets/vendors/css/vendor.bundle.base.css' %}">
+	<link rel="stylesheet" href="{% static 'css/assets/css/style.css' %}">
+	<!-- End layout styles -->
+	<link rel="shortcut icon" href="{% static 'css/assets/images/favicon.ico' %}" />
 </head>
+
+<body>
+	<div class="container-scroller">
+		<div class="container-fluid page-body-wrapper full-page-wrapper">
+			<div class="content-wrapper d-flex align-items-center auth">
+				<div class="row flex-grow">
+					<div class="col-lg-4 mx-auto">
+						<div class="auth-form-light text-center p-5">
+							<div class="brand-logo">
+								<img src="{% static 'css/assets/images/UNU.png' %}">
+							</div>
+							<h4>New here?</h4>
+							<h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+							<form class="pt-3" method="POST">
+								{% csrf_token %}
+								<div class="form-group">
+									<input type="text" name="first_name" class="form-control form-control-lg"placeholder="First Name">
+								</div>
+								<div class="form-group">
+									<input type="text"  name="last_name" class="form-control form-control-lg" placeholder="Last Name">
+								</div>
+								<div class="form-group">
+									<input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+								</div>
+								<div class="form-group">
+									<input type="text" name="username" class="form-control form-control-lg" placeholder="Username">
+								</div>
+								<div class="form-group">
+									<input type="password" name="password1" class="form-control form-control-lg" id="myinput" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<input type="password" name="password2" class="form-control form-control-lg"placeholder="Password">
+								</div>
+						</div>
+						<div class="mt-3">
+							<input class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
+								type="submit" value="SIGN UP">
+						</div>
+						<div class="text-center mt-4 font-weight-light"> Already have an account? <a href="{% url 'login' %}	"
+								class="text-primary">Login</a>
+						</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- content-wrapper ends -->
+	</div>
+	<!-- page-body-wrapper ends -->
+	</div>
+	<script>
+		function myFunction() {
+		var x = document.getElementById("myInput");
+		if (x.type === "password") {
+			x.type = "text";
+		} else {
+			x.type = "password";
+		}
+		}
+	</script>
+	<script src="{% static 'css/assets/vendors/js/vendor.bundle.base.js' %}"></script>
+	<script src="{% static 'css/assets/js/off-canvas.js' %}"></script>
+	<script src="{% static 'css/assets/js/hoverable-collapse.js' %}"></script>
+	<script src="{% static 'css/assets/js/misc.js' %}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</body>
+
+</html>
+<!-- 
 <body>
 	<div class="container h-100">
 		<div class="d-flex justify-content-center h-100">
@@ -116,15 +135,15 @@
 
 
 
-				   		<div class="d-flex justify-content-center mt-3 login_container">
-				 			<input class="btn login_btn" type="submit" value="Register Account">
-				   		</div>
+						<div class="d-flex justify-content-center mt-3 login_container">
+							<input class="btn login_btn" type="submit" value="Register Account">
+						</div>
 
 					</form>
 				</div>
 
 				{{form.errors}}
-				
+
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
 						Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
@@ -134,23 +153,24 @@
 		</div>
 	</div>
 	<script>
-						/* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
-		//We start indexing at one because CSRF_token is considered and input field 
-		 */
+		/* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+//We start indexing at one because CSRF_token is considered and input field 
+*/
 
 		//Query All input fields
 		var form_fields = document.getElementsByTagName('input')
-		form_fields[1].placeholder='Username..';
-		form_fields[2].placeholder='Email..';
-		form_fields[3].placeholder='Firstname..';
-		form_fields[4].placeholder='Lastname..';
-		form_fields[5].placeholder='Enter password...';
-		form_fields[6].placeholder='Re-enter Password...';
+		form_fields[1].placeholder = 'Username..';
+		form_fields[2].placeholder = 'Email..';
+		form_fields[3].placeholder = 'Firstname..';
+		form_fields[4].placeholder = 'Lastname..';
+		form_fields[5].placeholder = 'Enter password...';
+		form_fields[6].placeholder = 'Re-enter Password...';
 
 
-		for (var field in form_fields){	
+		for (var field in form_fields) {
 			form_fields[field].className += ' form-control'
 		}
 	</script>
 </body>
-</html>
+
+</html> -->

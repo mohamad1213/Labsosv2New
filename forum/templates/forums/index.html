@@ -1,97 +1,184 @@
 {% extends "base_staf.html" %}
+{% load static %}
 
 {% block content %}
-<div class="container-fluid">
-    <h1 class="mt-4" style="text-align: center;">FORUM</h1>
-    <ol class="breadcrumb mb-4">
-    </ol>
+<div class="container-fluid" style="padding: 5px;">
+    <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i>Previous</button>
+    <h4 class="mt-4" style="text-align: center;">FORUM</h4>
     <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal" data-target="#input"
         style="background-color:rgb(255, 214, 0); color: black;">
         <span><span>&#43;</span><b> I N P U T </b></span>
     </button>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card-body">
-                    <div class="card">
-                        {% for d in data %}
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h5 class="card-title m-0">{{d.nama_mitra}}</h5>
+    <div class="table-responsive">
+        <table class="table table-hover" id="" width="100%" cellspacing="0">
+            <thead>
+                <tr style="background-color: #625f53; color: aliceblue;">
+                    <th>No</th>
+                    <th>Nama Mitra</th>
+                    <th>PIC</th>
+                    <!-- <th>Alamat/th> -->
+                    <th>Kontak</th>
+                    <!-- <th>Deskripsi</th> -->
+                    <th>Action</th>
+                </tr>
+            </thead>
+            {% for d in data %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{d.nama_mitra}}</td>
+                <td>{{d.pic}}</td>
+                <!-- <td>{{d.alamat}}</td> -->
+                <td>{{d.telp}}</td>
+                <!-- <td>{{d.deskripsi}}</td> -->
+                <td>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#detail-{{d.id}}"
+                        style="background-color:rgb(255, 214, 0);">
+                        <i class="fas fa-eye"></i></button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-{{d.id}}">
+                        <i class="fas fa-pen"></i></button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-{{d.id}}">
+                        <i class="fas fa-trash-alt"></i></i></button>
+                </td>
+            </tr>
+
+            <!-- Modal Delete -->
+            <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-body">
+                                <p> Do You want To delete
+                                    <strong>{{d.nama_mitra}}</strong>?</p>
                             </div>
-                            <div class="card-body">
-                                PIC :<p class="card-text">{{d.pic}}</p>
-                                Alamat :<p class="card-text">{{d.alamat}}</p>
-                                Nomor Telepon :<p class="card-text">{{d.telp}}</p>
-                                Deskripsi :<p class="card-text">{{d.deskripsi}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
+                                No
+                            </button>
+                            <a href="/forums/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal update -->
+            <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="update">Edit Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/forums/{{d.id}}/update/" method="POST" class="mt-3">
+                                {% csrf_token %}
+
+                                <div class="form-group">
+                                    <label for="">Nama Mitra</label>
+                                    <input type="text" name="nama_mitra" value="{{d.nama_mitra}}"
+                                        class="form-control mt-2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">PIC</label>
+                                    <input type="text" name="pic" value="{{d.pic}}" class="form-control mt-2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Alamat Lengkap</label>
+                                    <input type="text" name="alamat" value="{{d.alamat}}" class="form-control mt-2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Kontak</label>
+                                    <input type="text" name="telp" value="{{d.telp}}" class="form-control mt-2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Deskripsi</label>
+                                    <input type="text" name="deskripsi" value="{{d.deskripsi}}"
+                                        class="form-control mt-2">
+                                </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger" data-toggle="modal"
-                                        data-target="#delete-{{d.id}}"><i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    <a href="/forums/{{d.id}}" type="submit" class="btn btn-primary">Masuk Grup</a>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Modal Detail-->
+                <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detail">Detail Data</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="">
+                                    Nama Mitrra : {{d.nama_mitra}}
+                                </div>
+                                <div class="">
+                                    PIC : {{d.pic}}
+                                </div>
+                                <div class="">
+                                    Alamat : {{d.alamat}}
+                                </div>
+                                <div class="">
+                                    Kontak : {{d.telp}}
+                                </div>
+                                <div class="">
+                                    Deskripsi : {{d.deskripsi}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                {% endfor %}
+        </table>
 
-                        <!-- Modal Delete -->
-                        <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="modal-body">
-                                            <p> Do You want To delete
-                                                <strong>{{d.nama_mitra}}</strong>?
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                                            No
-                                        </button>
-                                        <a href="/forums/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                                    </div>
-                                </div>
+
+        <!-- Modal input -->
+        <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="input">Input Data PKL</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post" class="mt-3" enctype="multipart/form-data">
+                            {% load crispy_forms_tags %}
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Input</button>
                             </div>
-                        </div>
-                        {% endfor %}
-
-                        <!-- Modal Input -->
-                        <div class="modal fade" id="input" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="input">Input Forum</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                                            {% load crispy_forms_tags %}
-                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Input</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
+</div>
+</div>
+</div>
 {% endblock %}

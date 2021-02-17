@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard - Dosen</title>
+    <link rel="stylesheet" href="{% static 'css/dist/css/sweetalert.css' %}">
+    <link href="{% static 'css/dist/css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/dist/js/dataTables.bootstrap4.min.css' %}" rel="stylesheet" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-auto">
+
+    <body class="sb-nav-auto">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark" style="background-color: rgb(255, 214, 0);">
+            <h5 class="navbar-dark" style="width: 225px;padding-left: 1rem; padding-right: 1rem; margin: 0;"> SIM-LABSOS
+            </h5>
+            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" style="color: black;"><i
+                    class="fas fa-bars"></i></button>
+            <!-- Navbar Search
+                <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form> -->
+            <!-- Navbar-->
+            <ul class="navbar-nav ml-auto ml-md-12">
+                <li class="sb-topnav navbar navbar-expand navbar-dark">
+                    <h6 class="navbar-dark" style="margin-top: 9px;">{{user}}</h6>
+                </li>
+                <li class="sb-topnav navbar navbar-expand navbar-dark">
+                    <a class="nav-link dropdown-toggle navbar-dark" id="userDropdown" href="#" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"><i
+                            class="fas fa-user fa-fw"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/accounts/logout">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </body>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu" style="background-color: #625f53;">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading" style="color: honeydew;">Interface</div>
+                        <a class="nav-link collapsed" href="/">
+                            <div class="sb-nav-link-icon btn btn-sm btn-warning rounded-pill"
+                                style="margin-top: 10px; color: black; width: 100%; background-color: rgb(255, 214, 0);"><i
+                                    class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </div>
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                            aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon btn btn-sm btn-warning rounded-pill"
+                                style="margin-top: 10px; color: black; width: 100%; background-color: rgb(255, 214, 0);"><i class="fas fa-book-open"></i>
+                                Manajement
+                            </div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                            data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <h6 style="color: aliceblue;"><a class="nav-link" href="/dosenah"><b>Catatan</b></a></h6>
+                                <h6 style="color: aliceblue;"><a class="nav-link" href="/forumd/{{d.id}}"><b>Forum</b></a></h6>
+                                <h6 style="color: aliceblue;"><a class="nav-link" href="/"><b>Nilai</b></a></h6>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                {% include 'messages.html' %}
+                {% block content %}
+                <!-- # isi konten -->
+                {% endblock %}
+            </main>
+        </div>
+
+        <script src="{% static 'css/dist/js/jquery-3.5.1.min.js' %}" crossorigin="anonymous"></script>
+        <script src="{% static 'css/dist/js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+        <script src="{% static 'css/dist/js/scripts.js' %}"></script>
+        <script src="{% static 'css/dist/js/Chart.min.js' %}" crossorigin="anonymous"></script>
+        <script src="{% static 'css/dist/assets/demo/chart-area-demo.js' %}"></script>
+        <script src="{% static 'css/dist/assets/demo/chart-bar-demo.js' %}"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'css/dist/js/dataTables.bootstrap4.min.js' %}" crossorigin="anonymous"></script>
+        <script src="{% static 'css/dist/assets/demo/datatables-demo.js' %}"></script>
+        <script src="{% static 'css/dist/js/sweetalert.min.js' %}"></script>
+        <script src="{% static 'css/dist/js/sweetalert.js' %}"></script>
+        <script>
+            setTimeout(function () {
+                if ($('#msg').length > 0) {
+                    $('#msg').remove();
+                }
+            }, 2000)
+        </script>
+
+        {% block script %}
+
+        {% endblock %}
+
+</body>
+
+</html>

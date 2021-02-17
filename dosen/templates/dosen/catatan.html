@@ -2,41 +2,40 @@
 {% load static %}
 
 {% block content %}
-<div>
-    <div class="container-fluid">
-        <h1 class="mt-4 mb-4" style="text-align: center;">CATATAN MAHASISWA PKL</h1>
-        <div class="card-body">
-          <button type="button" class="btn btn-lg btn-primary mb-4 rounded-pill" data-toggle="modal" data-target="#input">
-            <span><span></span> C E K</span>
-          </button>
-          <div class="card-body">
-            <!-- <a type="submit" href="/mahasiswas/input"><button class="btn btn-primary mb-4">Tambah</button></a> -->
-            <div class="table-responsive">
-              <table class="table table-responsive table-hover" id="" width="100%" cellspacing="2">
-                <thead>
-                  <tr class="thead-dark">
-                    <th>No</th>
-                    <th>Nim</th>
-                    <th>Judul</th>
-                    <th>Nama Mitra</th>
-                    <th>Tanggal Pelaksanaan</th>
-                  </tr>
-                </thead>
-                {% for d in data %}
-                <tr>
-                  <td>{{forloop.counter}}</td>
-                  <td>{{d.id}}</td>
-                  <td><a href="/mahasiswas/{{d.id}}">{{d.judul}}</a></td>
-                  <td>{{d.nama_mitra}}</td>
-                  <td>{{d.tanggal_mulai}} - {{d.tanggal_selesai}}</td>
-                </tr>
-                {% endfor %}
-              </table>
-              
-            </div>
-          </div>
-        </div>
+<div class="container-fluid" style="padding: 5px;">
+  <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i> Preview</button>
+  <h4 class="mt-4 mb-4" style="text-align: center;">mon</h4>
+  <div class="card-body">
+    <button type="button" class="btn btn-lg btn-primary mb-4 rounded-pill" data-toggle="modal" data-target="#input">
+      <span><span></span> C E K</span>
+    </button>
+    <div class="card-body">
+      <!-- <a type="submit" href="/mahasiswas/input"><button class="btn btn-primary mb-4">Tambah</button></a> -->
+      <div class="table-responsive">
+        <table class="table table-responsive table-hover" id="" width="100%" cellspacing="2">
+          <thead>
+            <tr class="thead-dark">
+              <th>No</th>
+              <th>Nim</th>
+              <th>Judul</th>
+              <th>Nama Mitra</th>
+              <th>Tanggal Pelaksanaan</th>
+            </tr>
+          </thead>
+          {% for d in data %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{d.id}}</td>
+            <td><a href="/mahasiswas/{{d.id}}">{{d.judul}}</a></td>
+            <td>{{d.nama_mitra}}</td>
+            <td>{{d.tanggal_mulai}} - {{d.tanggal_selesai}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
 

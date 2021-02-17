@@ -7,9 +7,9 @@ from . import models
 class DosenForm(ModelForm):
     class Meta :
         model = models.Dosen
-        exclude=[]
+        exclude=['owner']
 
 class CreateUserForm(UserCreationForm):
 	class Meta:
 		model = User
-		fields = ['username', 'email']
+		fields = ['username', 'email', 'password1', 'password2']

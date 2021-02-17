@@ -6,89 +6,103 @@
     <ol class="breadcrumb mb-4">
     </ol>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card-body">
-                    <div class="card">
-                        {% for d in data %}
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h5 class="card-title m-0">{{d.nama_mitra}}</h5>
-                            </div>
-                            <div class="card-body">
-                                PIC :<p class="card-text">{{d.pic}}</p>
-                                Alamat :<p class="card-text">{{d.alamat}}</p>
-                                Nomor Telepon :<p class="card-text">{{d.telp}}</p>
-                                Deskripsi :<p class="card-text">{{d.deskripsi}}</p>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger" data-toggle="modal"
-                                        data-target="#delete-{{d.id}}"><i class="fas fa-trash-alt"></i>
-                                    </button>
-                                    <a href="/forum/{{d.id}}" type="submit" class="btn btn-primary">Masuk Grup</a>
-                                </div>
-                            </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+            <div class="card-body">
+                <div class="card">
+                    {% for d in data %}
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h5 class="card-title m-0">{{d.forum.nama_mitra}}</h5>
                         </div>
-
-                        <!-- Modal Delete -->
-                        <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="modal-body">
-                                            <p> Do You want To delete
-                                                <strong>{{d.nama_mitra}}</strong>?
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                                            No
-                                        </button>
-                                        <a href="/forums/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                                    </div>
+                        <div class="card-body">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col">PIC</div>
+                                    <div class="col-lg-9 col-md-9 col">: {{d.pic}}</div>
                                 </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-
-                        <!-- Modal Input -->
-                        <div class="modal fade" id="input" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="input">Input Forum</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                                            {% load crispy_forms_tags %}
-                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Input</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col">Alamat</div>
+                                    <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.alamat}}</div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col">Kontak</div>
+                                    <div class="col-lg-9 col-md-9 col">: {{d.telp}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col">Deskripsi</div>
+                                    <div class="col-lg-9 col-md-9 col">: {{d.deskripsi}}</div>
+                                </div>
+                            </li>
                         </div>
-
-
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" data-toggle="modal"
+                                data-target="#delete-{{d.id}}"><i class="fas fa-trash-alt"></i>
+                            </button>
+                            <a href="/forum/{{d.id}}" type="submit" class="btn btn-primary">Masuk Grup</a>
+                        </div>
                     </div>
+
+                    <!-- Modal Delete -->
+                    <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-body">
+                                        <p> Do You want To delete
+                                            <strong>{{d.nama_mitra}}</strong>?
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
+                                        No
+                                    </button>
+                                    <a href="/forum/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Modal Input -->
+                    <div class="modal fade" id="input" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="input">Input Forum</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post" class="mt-3" enctype="multipart/form-data">
+                                        {% load crispy_forms_tags %}
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Input</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
+    </div>
 
-{% endblock %}
+    {% endblock %}

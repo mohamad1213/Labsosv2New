@@ -1,75 +1,72 @@
 {% extends "base_dosen.html" %}
 
 {% block content %}
-<div class="container-fluid">
-  <h1 class="mt-4 mb-4" style="text-align: center;">Daily Report</h1>
+<div class="container-fluid" style="padding: 5px;">
+  <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i>
+    Previous</button>
+  <h4 class="mt-4 mb-4" style="text-align: center;">Daily Report</h4>
   <div class="row">
     <div class="col">
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover table-borderless" id="" width="100%" cellspacing="0">
-            <thead>
-              <tr style="background-color:  #625f53; color: aliceblue;;">
-                <th>#</th>
-                <th>NIM</th>
-                <th>Tanggal Kegiatan</th>
-                <th>Judul</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            {% for d in data %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <!-- <td>{{d.id}}</td> -->
-              <td>{{d.owner}}</td>
-              <td>{{d.tgl_kegiatan}}</td>
-              <td>{{d.judul}}</td>
-              <td>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#detail-{{d.id}}" style="background-color:#625f53; ;" >
-                  <i class="fas fa-eye"></i></button>
-              </td>
+      <div class="table-responsive">
+        <table class="table table-hover table-borderless" id="" width="100%" cellspacing="0">
+          <thead>
+            <tr style="background-color:  #625f53; color: aliceblue;">
+              <th>No</th>
+              <th>Tanggal</th>
+              <th>Judul</th>
+              <th>Status</th>
+              <th>Paraf</th>
             </tr>
-            <!-- Modal Detail -->
-            <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="detail">Detail Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+          </thead>
+          {% for d in data %}
+          <tr data-toggle="modal" data-target="#detail-{{d.id}}">
+            <td>{{forloop.counter}}</td>
+            <td>{{d.tgl_kegiatan}}</td>
+            <td>{{d.judul}}</td>
+            <td>
+                {{get_percentage_done}}
+              </td>
+              <td>
+                <!-- <a type="button" class="btn btn-success" href="/mahasiswas/{{d.id}}">Detail</a> -->
+                <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon" ><i
+                    class="mdi mdi-check-circle"></i><a href="/dosenah/{{d.id}}/approve2"></a></button>
+              </td>
+          </tr>
+          
+          <!-- Modal Detail -->
+          <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="row">
+                  <h5 class="modal-title" id="detail">{{d.owner}}</h5>
+                    <button class="btn btn-primary" style="float:right;">Nilai</button>
                   </div>
-                  <div class="modal-body">
-                      <div class="">
-                        Tanggal Kegiatan : {{d.tgl_kegiatan}}
-                      </div>
-                      <div class="">
-                        Owner : {{d.owner}}
-                      </div>
-                      <div class="position">
-                        Judul : {{d.judul}}
-                      </div>
-                      <div class="office">
-                        Uraian : {{d.ket}}
-                      </div>
-                      <div class="age">
-                        {% for img_obj in d.catatan.all %}
-                        <a href="{{img_obj}}">File</a>
-                        {% endfor %}
-                      </div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <dd><i>{{d.waktu}}</i></dd>
+                  <dt>{{d.judul}}</dt>
+                  <p>{{d.ket}}</p>
+                  {% for d in d.catatan.all %}
+                  <div class="col-12" style="text-align: center;"><img src="{{d}}" width="100%">
+                    <a href="{{d}}">File {{forloop.counter}}</a>
+                  </div>
+                  {% endfor %}
 
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
               </div>
-              {% endfor %}
-          </table>
-        </div>
+            </div>
+          </div>
       </div>
+      {% endfor %}
+      </table>
     </div>
   </div>
 </div>

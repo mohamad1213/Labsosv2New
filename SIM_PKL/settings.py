@@ -34,9 +34,8 @@ INSTALLED_APPS = [
     'catatan',
     'mitra',
     'forum',
-    # 'comment',
     'countable_field',
-    'gm2m',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -78,9 +77,9 @@ WSGI_APPLICATION = 'SIM_PKL.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'simpkl',
-        'USER': 'giko99',
-        'PASSWORD': 'gikoriyo382',
+        'NAME': 'labsos',
+        'USER': 'mohamad',
+        'PASSWORD': 'tatam123',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -109,9 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'id-idn'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -119,9 +118,22 @@ USE_L10N = True
 
 USE_TZ = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hatami391998@gmail.com'
+EMAIL_HOST_PASSWORD = 'istimewajogja123'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+#message verifikasi account
+HTML_MESSAGE_TEMPLATE = "/templates/email_messages.html"
+
+VERIFICATION_SUCCESS_TEMPLATE = "/templates/succes_verifikasi.html"
+
+VERIFICATION_FAILED_TEMPLATE = "/templates/failed_verifikasi.html"
+SUBJECT = 'Email Verification Mail'
+
 
 STATIC_URL = '/static/'
 

@@ -1,46 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="layoutSidenav_content">
-  <main>
-    <div class="container-fluid">
-      <h1 class="mt-4">Catatan</h1>
-      <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Catatan Kegiatan</li>
-      </ol>
-      <div class="row">
-        <div class="col-md-10">
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-responsive col-md-10" id="" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <td>Judul Proposal</td>
-                    <td>:</td>
-                    <td>{{data.judul}}</td>
-                  </tr>
-                  <tr>
-                    <td>Nama Mitra</td>
-                    <td>:</td>
-                    <td>{{data.nama_mitra}}</td>
-                  </tr>
-                  <tr>
-                    <td>Dosen</td>
-                    <td>:</td>
-                    <td>{{data.dosen}}</td>
-                  </tr>
-                  <tr>
-                    <td>Tanggal Lab-Sos</td>
-                    <td>:</td>
-                    <td>{{data.tanggal_mulai}} - {{data.tanggal_selesai}}</td>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-          </div>
+<div class="container-fluid">
+  <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i> Previous</button>
+  <h4 class="mt-4">Catatan</h4>
+  <br>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Catatan Kegiatan</li>
+  </ol>
+  <div class="row">
+    <div class="col-md-10">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-responsive col-md-10" id="" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <td>Judul Proposal</td>
+                <td>:</td>
+                <td>{{data.judul}}</td>
+              </tr>
+              <tr>
+                <td>Nama Mitra</td>
+                <td>:</td>
+                <td>{{data.nama_mitra}}</td>
+              </tr>
+              <tr>
+                <td>Dosen</td>
+                <td>:</td>
+                <td>{{data.dosen}}</td>
+              </tr>
+              <tr>
+                <td>Tanggal Lab-Sos</td>
+                <td>:</td>
+                <td>{{data.tanggal_mulai}} - {{data.tanggal_selesai}}</td>
+              </tr>
+            </thead>
+          </table>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </div>
 {% endblock %}

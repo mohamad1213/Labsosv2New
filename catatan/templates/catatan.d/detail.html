@@ -1,0 +1,37 @@
+{% extends "base_dosen.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <h1 class="mt-4 mb-4" style="text-align: center;">Daily Report</h1>
+  <div class="row">
+    <div class="col">
+      <div class="card-body">
+        <button type="button" class="btn btn-primary btn-lg mb-4 rounded-pill" data-toggle="modal"
+          data-target="#tambah">
+          <span><span>&#43;</span> T U L I S </span>
+        </button>
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless" id="" width="100%" cellspacing="0">
+                {% for d in data %}
+                <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{d.owner}}</td>
+                <td>{{d.tgl_kegiatan}}</td>
+                <td>{{d.judul}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detail-{{d.id}}">
+                    <i class="fas fa-eye"></i></button>
+                </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}

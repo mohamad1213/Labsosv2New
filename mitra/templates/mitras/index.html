@@ -10,8 +10,8 @@
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-hover " id="" width="100%" cellspacing="2">
-            <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal"
-              data-target="#input" style="background-color:rgb(255, 214, 0); color: black;">
+            <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal" data-target="#input"
+              style="background-color:rgb(255, 214, 0); color: black;">
               <span><span>&#43;</span><b> I N P U T </b></span>
             </button>
             <thead>
@@ -33,9 +33,11 @@
               <td>{{d.telp}}</td>
               <td>
                 <a href="/forums/{{d.id}}" type="submit" class="btn btn-primary">Masuk Grup</a>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#detail-{{d.id}}" style="background-color:#625f53;">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#detail-{{d.id}}"
+                  style="background-color:#625f53;">
                   <i class="fas fa-eye"></i></button>
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#update-{{d.id}}" style="background-color:rgb(255, 214, 0);">
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#update-{{d.id}}"
+                  style="background-color:rgb(255, 214, 0);">
                   <i class="fas fa-pen"></i></button>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-{{d.id}}">
                   <i class="fas fa-trash-alt"></i></i></button>
@@ -55,132 +57,144 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <div class="">
-                      Nama Mitra : {{d.nama_mitra}}
+                    <div class="card-body">
+                      <li class="list-group-item">
+                        <div class="row">
+                          <div class="col-lg-3 col-md-3 col">Nama Mitra</div>
+                          <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra}}</div>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="row">
+                          <div class="col-lg-3 col-md-3 col">ALamat</div>
+                          <div class="col-lg-9 col-md-9 col">: {{d.alamat}}</div>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="row">
+                          <div class="col-lg-3 col-md-3 col">Deskripsi</div>
+                          <div class="col-lg-9 col-md-9 col">: {{d.deskripsi}}</div>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="row">
+                          <div class="col-lg-3 col-md-3 col">PIC</div>
+                          <div class="col-lg-9 col-md-9 col">: {{d.pic}}</div>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="row">
+                          <div class="col-lg-3 col-md-3 col">Nomer Telepon</div>
+                          <div class="col-lg-9 col-md-9 col">: {{d.telp}}</div>
+                        </div>
+                      </li>
                     </div>
-                    <br>
-                    <div class="">
-                      Alamat : {{d.alamat}}
+                    
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
-                    <br>
-                    <div class="">
-                      Deskripsi : {{d.deskripsi}}
-                    </div>
-                    <br>
-                    <div class="">
-                      PIC : {{d.pic}}
-                    </div>
-                    <br>
-                    <div class="">
-                      Nomer Telepon : {{d.telp}}
-                    </div>
-                    <br>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- Modal update -->
-            <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="update">Edit Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="/mitras/{{d.id}}/update/" method="POST" class="mt-3">
-                      {% csrf_token %}
-
-                      <div class="form-group">
-                        <label for="">Nama Mitra</label>
-                        <input type="text" name="nama_mitra" value="{{d.nama_mitra}}" class="form-control mt-2">
-                      </div>
-                      <div class="form-group">
-                        <label for="">Alamat</label>
-                        <input type="text" name="alamat" value="{{d.alamat}}" class="form-control mt-2">
-                      </div>
-                      <div class="form-group">
-                        <label for="">Deskripsi</label>
-                        <input type="text" name="deskripsi" value="{{d.deskripsi}}" class="form-control mt-2">
-                      </div>
-                      <div class="form-group">
-                        <label for="">PIC</label>
-                        <input type="text" name="pic" value="{{d.pic}}" class="form-control mt-2">
-                      </div>
-                      <div class="form-group">
-                        <label for="">Nomer Telepon</label>
-                        <input type="text" name="telp" value="{{d.telp}}" class="form-control mt-2">
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-                </form>
-              </div>
-            </div>
-
-
-            <!-- Modal Delete -->
-            <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
+              <!-- Modal update -->
+              <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="update">Edit Data</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
                     <div class="modal-body">
-                      <p> Do You want To delete
-                        <strong>{{d.nama_mitra}}</strong>?</p>
+                      <form action="/mitras/{{d.id}}/update/" method="POST" class="mt-3">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                          <label for="">Nama Mitra</label>
+                          <input type="text" name="nama_mitra" value="{{d.nama_mitra}}" class="form-control mt-2">
+                        </div>
+                        <div class="form-group">
+                          <label for="">Alamat</label>
+                          <input type="text" name="alamat" value="{{d.alamat}}" class="form-control mt-2">
+                        </div>
+                        <div class="form-group">
+                          <label for="">Deskripsi</label>
+                          <input type="text" name="deskripsi" value="{{d.deskripsi}}" class="form-control mt-2">
+                        </div>
+                        <div class="form-group">
+                          <label for="">PIC</label>
+                          <input type="text" name="pic" value="{{d.pic}}" class="form-control mt-2">
+                        </div>
+                        <div class="form-group">
+                          <label for="">Nomer Telepon</label>
+                          <input type="text" name="telp" value="{{d.telp}}" class="form-control mt-2">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                   </div>
-                  <div class="modal-footer">
-                    <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                      No
-                    </button>
-                    <a href="/mitras/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                  </div>
+                  </form>
                 </div>
               </div>
-            </div>
-            {% endfor %}
-            <!-- Modal Input -->
-            <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-              aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="input">Input Mitra PKL</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                      {% load crispy_forms_tags %}
-                      {% csrf_token %}
-                      {{ form|crispy }}
-                      {{ form_forum|crispy }}
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Input</button>
+
+
+              <!-- Modal Delete -->
+              <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="modal-body">
+                        <p> Do You want To delete
+                          <strong>{{d.nama_mitra}}</strong>?</p>
                       </div>
-                    </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
+                        No
+                      </button>
+                      <a href="/mitras/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+              {% endfor %}
+              <!-- Modal Input -->
+              <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="input">Input Mitra PKL</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="" method="post" class="mt-3" enctype="multipart/form-data">
+                        {% load crispy_forms_tags %}
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        {{ form_forum|crispy }}
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Input</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </table>
         </div>
 

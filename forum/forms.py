@@ -1,4 +1,5 @@
-from django.forms import ModelForm
+from django.forms import ModelForm,ClearableFileInput
+
 
 from . import models
 
@@ -10,7 +11,10 @@ class ForumForm(ModelForm):
 class PostingForm(ModelForm):
     class Meta :
         model = models.Posting
-        exclude=['forum','owner','waktu']
+        exclude=['forum','owner','waktu'] 
+        widgets = {
+            'upload_img': ClearableFileInput(attrs={'multiple': True}),
+        }
 
 class KomenForm(ModelForm):
     class Meta:

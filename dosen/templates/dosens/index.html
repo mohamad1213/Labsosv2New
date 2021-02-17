@@ -2,210 +2,161 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
-    <h1 class="mt-4" style="text-align: center;">DATA DOSEN</h1>
-    <ol class="breadcrumb mb-4">
-    </ol>
+<div class="container-fluid" style="padding: 5px;">
+  <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i> Preview</button>
+    <h4 class="mt-4" style="text-align: center; margin-bottom: 30px;">DATA DOSEN</h4>
     <div class="row">
         <div class="col-md-12">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table" id="dataTable" width="100%" cellspacing="2">
-                        <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal"
-                            data-target="#input" style="background-color:rgb(255, 214, 0); color: black;">
-                            <span><span>&#43;</span><b> I N P U T </b></span>
-                        </button>
-                        <thead>
-                            <tr style="background-color: #625f53; color: aliceblue;">
+            <div class="table-responsive">
+                <table class="table" id="dataTable" width="100%" cellspacing="2">
+                    <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal"
+                        data-target="#input" style="background-color:rgb(255, 214, 0); color: black; margin-top: 10px;">
+                        <span><span>&#43;</span><b> I N P U T </b></span>
+                    </button>
+                    <thead>
+                        <tr style="background-color: #625f53; color: aliceblue;">
 
-                                <th scope="col">#</th>
-                                <th scope="col">Nama Dosen</th>
-                                <th scope="col">NIP</th>
-                                <th scope="col">Fakultas</th>
-                                <th scope="col">Jurusan</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            {% for d in data %}
+                            <th scope="col">No</th>
+                            <th scope="col">Nama Dosen</th>
+                            <th scope="col">NIP</th>
+                            <th scope="col">Fakultas</th>
+                            <th scope="col">Jurusan</th>
+                            <th scope="col">Action</th>
                         </tr>
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{d.nama_dosen}}</td>
-                            <td>{{d.nip}}</td>
-                            <td>{{d.fakultas}}</td>
-                            <td>{{d.jurusan}}</td>
-                            <td>
-                                <button type="button" class="btn btn-secondary" data-toggle="modal"
-                                    data-target="#detail-{{d.id}}" style="background-color: #625f53;">
-                                    <i class="fas fa-eye"></i></button>
-                                <button type="button" class="btn btn-warning" data-toggle="modal"
-                                    data-target="#update-{{d.id}}" style="background-color:rgb(255, 214, 0);">
-                                    <i class="fas fa-pen"></i></button>
-                                <button type="button" class="btn btn-danger" data-toggle="modal"
-                                    data-target="#delete-{{d.id}}">
-                                    <i class="fas fa-trash-alt"></i></i></button>
-                            </td>
-                        </tr>
-                        </ol>
+                    </thead>
+                    <tr>
+                        {% for d in data %}
+                    </tr>
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="/dosens/{{d.id}}">{{d.nama_dosen}}</a></td>
+                        <td>{{d.nip}}</td>
+                        <td>{{d.fakultas}}</td>
+                        <td>{{d.jurusan}}</td>
+                        <td>
+                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#update-{{d.id}}" style="background-color:rgb(255, 214, 0);">
+                                <i class="fas fa-pen"></i></button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                data-target="#delete-{{d.id}}">
+                                <i class="fas fa-trash-alt"></i></i></button>
+                        </td>
+                    </tr>
+                    </ol>
 
 
-                        <!-- Modal Detail-->
-                        <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="detail">Detail Data</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="">
-                                            Nama Dosen : {{d.nama_dosen}}
-                                        </div>
-                                        <br>
-                                        <div class="">
-                                            NIP : {{d.nip}}
-                                        </div>
-                                        <br>
-                                        <div class="">
-                                            Fakultas : {{d.fakultas}}
-                                        </div>
-                                        <br>
-                                        <div class="">
-                                            Jurusan : {{d.jurusan}}
-                                        </div>
-                                        <br>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Close</button>
-                                    </div>
+                    <!-- Modal update -->
+                    <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="update">Edit Data</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- Modal update -->
-                        <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="update">Edit Data</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="/dosens/{{d.id}}/update/" method="POST" class="mt-3">
-                                            {% csrf_token %}
+                                <form action="/dosens/{{d.id}}/update/" method="POST" class="mt-3">
+                                    {% csrf_token %}
 
-                                            <div class="form-group">
-                                                <label for="">Nama Dosen</label>
-                                                <input type="text" name="nama_dosen" value="{{d.nama_dosen}}"
-                                                    class="form-control mt-2">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">NIP</label>
-                                                <input type="text" name="nip" value="{{d.nip}}"
-                                                    class="form-control mt-2">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Fakultas</label>
-                                                <input type="text" name="fakultas" value="{{d.fakultas}}"
-                                                    class="form-control mt-2">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Jurusan</label>
-                                                <input type="text" name="jurusan" value="{{d.jurusan}}"
-                                                    class="form-control mt-2">
-                                            </div>
+                                    <div class="form-group">
+                                        <label for="">Nama Dosen</label>
+                                        <input type="text" name="nama_dosen" value="{{d.nama_dosen}}"
+                                            class="form-control mt-2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">NIP</label>
+                                        <input type="text" name="nip" value="{{d.nip}}" class="form-control mt-2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Fakultas</label>
+                                        <input type="text" name="fakultas" value="{{d.fakultas}}"
+                                            class="form-control mt-2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Jurusan</label>
+                                        <input type="text" name="jurusan" value="{{d.jurusan}}"
+                                            class="form-control mt-2">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Save changes</button>
                                     </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Delete -->
+                    <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete">Delete Data Dosen</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-body">
+                                        <p> Do You want To delete
+                                            <strong>{{d.nama_dosen}}</strong>?</p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
+                                        No
+                                    </button>
+                                    <a href="/dosens/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- Modal Input -->
+                    <div class="modal fade" id="input" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="input">Input Data Dosen</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post" class="mt-3" enctype="multipart/form-data">
+                                        {% load crispy_forms_tags %}
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        {{ form_user|crispy }}
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Input</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <!-- Modal Delete -->
-                        <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="delete">Delete Data Dosen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="modal-body">
-                                            <p> Do You want To delete
-                                                <strong>{{d.nama_dosen}}</strong>?</p>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                                            No
-                                        </button>
-                                        <a href="/dosens/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        <!-- Modal Input -->
-                        <div class="modal fade" id="input" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="input">Input Data Dosen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                                            {% load crispy_forms_tags %}
-                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                            {{ form_user|crispy }}
-                                            <!-- <div class="">
-                                                        Username : {{form_user.username}}
-                                                    </div>
-                                                    {{form_user.username}}
-                                                    {{form_user.email}}
-                                                    {{form_user.password}} -->
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Input</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </table>
-                </div>
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-                {% endblock %}
-                <!-- Optional JavaScript -->
-                <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-                    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-                    crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-                    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-                    crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-                    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-                    crossorigin="anonymous"></script>
-                </body>
+{% endblock %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+</body>
 
-                </html>
+</html>

@@ -1,56 +1,45 @@
 {
-    "title": "SB Admin",
-    "name": "startbootstrap-sb-admin",
-    "version": "6.0.1",
-    "scripts": {
-        "build": "npm run clean && npm run build:pug && npm run build:scss && npm run build:scripts && npm run build:assets",
-        "build:assets": "node scripts/build-assets.js",
-        "build:pug": "node scripts/build-pug.js",
-        "build:scripts": "node scripts/build-scripts.js",
-        "build:scss": "node scripts/build-scss.js",
-        "clean": "node scripts/clean.js",
-        "start": "npm run build && node scripts/start.js",
-        "start:debug": "npm run build && node scripts/start-debug.js"
-    },
-    "description": "A free admin dashboard template based on Bootstrap 4, created by Start Bootstrap.",
-    "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template",
-        "admin",
-        "app",
-        "dashboard"
-    ],
-    "homepage": "https://startbootstrap.com/templates/sb-admin",
-    "bugs": {
-        "url": "https://github.com/StartBootstrap/startbootstrap-sb-admin/issues",
-        "email": "feedback@startbootstrap.com"
-    },
-    "license": "MIT",
-    "author": "Start Bootstrap",
-    "contributors": [
-        "David Miller (http://davidmiller.io/)"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/StartBootstrap/startbootstrap-sb-admin.git"
-    },
-    "dependencies": {
-        "bootstrap": "4.5.0"
-    },
-    "devDependencies": {
-        "autoprefixer": "9.8.0",
-        "browser-sync": "2.26.7",
-        "chokidar": "3.4.0",
-        "concurrently": "5.2.0",
-        "postcss": "7.0.32",
-        "prettier": "2.0.5",
-        "pug": "3.0.0",
-        "sass": "1.26.8",
-        "shelljs": "0.8.4",
-        "upath": "1.2.0"
-    }
+  "name": "purple_admin",
+  "version": "3.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "@mdi/font": "3.7.95",
+    "bootstrap": "^4.3.1",
+    "chart.js": "^2.8.0",
+    "jquery": "^3.4.1",
+    "perfect-scrollbar": "^1.4.0",
+    "popper.js": "^1.15.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "compass-mixins": "^0.12.10",
+    "del": "^5.0.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-inject": "5.0.2",
+    "gulp-inject-partials": "^1.0.5",
+    "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-prettify": "^0.5.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-util": "^3.0.8",
+    "merge-stream": "^2.0.0",
+    "minimatch": "^3.0.4",
+    "require-dir": "^1.2.0",
+    "run-sequence": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bootstrapdash",
+  "url": "http://www.bootstrapdash.com/",
+  "copyright": "",
+  "license": ""
 }
