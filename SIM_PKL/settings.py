@@ -13,7 +13,12 @@ SECRET_KEY = 'y&ma&g0z0r603*p2qz9^hotn**h60eey1w2kwb)glz#sdtt8&)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+   'labsosv2.herokuapp.com',
+   'localhost',
+]
+
 
 
 # Application definition
@@ -77,11 +82,17 @@ WSGI_APPLICATION = 'SIM_PKL.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'labsos',
-        'USER': 'mohamad',
-        'PASSWORD': 'tatam123',
-        'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
+        'NAME': 'd5clsp00utpdqc',
+        'USER': 'jzehigmazjuqsl',
+        'PASSWORD': '4e051db742ca832a67976573b69c689bbf409c444983343506f29fe1565f7d29',
+        'HOST': 'ec2-52-6-75-198.compute-1.amazonaws.com',
+
+        # 'NAME': 'labsos',
+        # 'USER': 'mohamad',
+        # 'PASSWORD': 'tatam123',
+        # 'HOST': 'localhost',
+        # 'PORT': '',
     }
 }
 
