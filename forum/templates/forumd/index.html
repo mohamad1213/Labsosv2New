@@ -7,43 +7,43 @@
             <i class="mdi mdi-account-multiple"></i>
         </span> Forum </h3>
 </div>
-    <div class="row justify-content-md-center">
-        <div class="col-md-12">
-            <div class="card-body">
-                <div class="card">
-                    {% for d in data %}
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h5 class="card-title m-0">{{d.nama_mitra}}</h5>
-                        </div>
-                        <div class="card-body">
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col">PIC</div>
-                                    <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.pic}}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col">Alamat</div>
-                                    <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.alamat}}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col">Kontak</div>
-                                    <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.telp}}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col">Deskripsi</div>
-                                    <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.deskripsi}}</div>
-                                </div>
-                            </li>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="/forumd/{{d.id}}" type="submit" class="btn btn-primary">Masuk Grup</a>
-                        </div>
+<div class="row justify-content-md-center">
+    <div class="col-md-12">
+        <div class="card-body">
+            <div class="card">
+                {% for d in data %}
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h5 class="card-title m-0">{{d.nama_mitra}}</h5>
                     </div>
-                    {% endfor %}
+                    <div class="card-body">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col">PIC</div>
+                                <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.pic}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col">Alamat</div>
+                                <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.alamat}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col">Kontak</div>
+                                <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.telp}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col">Deskripsi</div>
+                                <div class="col-lg-9 col-md-9 col">: {{d.nama_mitra.deskripsi}}</div>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/forumd/{{d.id}}" type="submit" class="btn btn-primary">Masuk Grup</a>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
