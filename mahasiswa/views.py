@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from . import models, forms
 from dosen import models as dosen_models
 from catatan.models import Catatan
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 

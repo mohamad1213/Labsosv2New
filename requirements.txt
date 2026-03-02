@@ -1,0 +1,7 @@
+Django
+django-bootstrap-datepicker-plus
+django-crispy-forms
+Pillow
+psycopg2 
+djangorestframework
+crispy_bootstrap4

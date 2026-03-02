@@ -1,6 +1,5 @@
 from django.forms import ModelForm
 from django import forms
-from django.forms import ClearableFileInput
 from countable_field.widgets import CountableWidget
 from crispy_forms.helper import FormHelper
 from . import models
@@ -18,6 +17,6 @@ class GambarForm(ModelForm):
     class Meta :
         model = models.Gambar
         fields = ['upload_img']
-        widgets = {
-            'upload_img': ClearableFileInput(attrs={'multiple': True}),
-        }
+        # widgets = {
+        #     'upload_img':  forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+        # }

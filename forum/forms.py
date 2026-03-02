@@ -12,9 +12,6 @@ class PostingForm(ModelForm):
     class Meta :
         model = models.Posting
         exclude=['forum','owner','waktu'] 
-        widgets = {
-            'upload_img': ClearableFileInput(attrs={'multiple': True}),
-        }
 
 class KomenForm(ModelForm):
     class Meta:

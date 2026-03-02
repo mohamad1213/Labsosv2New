@@ -13,11 +13,11 @@ SECRET_KEY = 'y&ma&g0z0r603*p2qz9^hotn**h60eey1w2kwb)glz#sdtt8&)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = [
-   'labsosv2.herokuapp.com',
-   'localhost',
-]
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = [
+#    'labsosv2.herokuapp.com',
+#    'localhost',
+# ]
 
 
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'mitra',
     'forum',
     'countable_field',
+    'crispy_bootstrap4',
     'rest_framework',
 ]
 
@@ -81,18 +82,19 @@ WSGI_APPLICATION = 'SIM_PKL.wsgi.application'
 
 DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'PORT': '5432',
-        'NAME': 'd5clsp00utpdqc',
-        'USER': 'jzehigmazjuqsl',
-        'PASSWORD': '4e051db742ca832a67976573b69c689bbf409c444983343506f29fe1565f7d29',
-        'HOST': 'ec2-52-6-75-198.compute-1.amazonaws.com',
+        'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': 'd5clsp00utpdqc',
+        # 'PORT': '5432',
+        # 'NAME': 'd5clsp00utpdqc',
+        # 'USER': 'jzehigmazjuqsl',
+        # 'PASSWORD': '4e051db742ca832a67976573b69c689bbf409c444983343506f29fe1565f7d29',
+        # 'HOST': 'ec2-52-6-75-198.compute-1.amazonaws.com',
 
-        # 'NAME': 'labsos',
-        # 'USER': 'mohamad',
+        'NAME': 'labsosv2',
+        # 'USER': 'postgres',
         # 'PASSWORD': 'tatam123',
         # 'HOST': 'localhost',
-        # 'PORT': '',
+        # 'PORT': '5432',
     }
 }
 
@@ -158,6 +160,7 @@ MEDIA_URL = '/media/'
 BOOTSTRAP4 = {
     'include_jquery': True,
 }
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
 from django.contrib.messages import constants as messages
 
