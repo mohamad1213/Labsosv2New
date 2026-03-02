@@ -1,171 +1,130 @@
-# SIM LABSOS
-SIM LABSOS is a website-based application specifically used by students of the Yogyakarta Nahdlatul Ulama University in handling social laboratories,
+# 🎓 SIM LABSOS (Sistem Informasi Manajemen Laboratorium Sosial)
 
-#informatika2017
+![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-2.2+-092E20?style=for-the-badge&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
-# First Preparations
+**SIM LABSOS** adalah aplikasi berbasis web yang dirancang khusus untuk mahasiswa Universitas Nahdlatul Ulama Yogyakarta. Aplikasi ini memiliki fungsi utama sebagai **Sistem Informasi Manajemen Praktik Kerja Lapangan (SIM PKL)** serta berfokus dalam menangani seluruh proses administrasi terkait Laboratorium Sosiologi.
 
-For initial preparation to run * SIM LABSOS * applications. Python version 3 is needed, PostgresSQL, operating system Linux, (or using another OS).
+*(Versi yang dikembangkan: `v2` / Informatika 2017)*.
 
-1. Modules used:
- - python3 >= 3.4
- - Django == 2.2
- - django-bootstrap-datepicker-plus == 3.0.5
- - django-crispy-forms == 1.9.2
- - Pillow == 7.0.0
- - psycopg2 == 2.8.5
+---
 
-## Basic Settings
+## 📑 Daftar Isi
+- [Fitur Utama & Hak Akses](#-fitur-utama--hak-akses)
+- [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
+- [Prasyarat Sistem](#-prasyarat-sistem)
+- [Panduan Instalasi](#%EF%B8%8F-panduan-instalasi)
+- [Menjalankan Aplikasi](#-menjalankan-aplikasi)
+- [Akun Pengujian (Demo)](#-akun-pengujian-demo)
+- [Deployment](#-deployment)
 
-Requirements to start the project must use **python version 3**,
+---
 
-you can download and install [here](https://www.python.org/download/releases/3.0/),
+## 👥 Fitur Utama & Hak Akses
 
-This project also uses the **Postgre database**, the settings can be found in the **SIM_PKL** folder then the **setting.py** 
+Sistem ini dikembangkan dengan arsitektur **multi-role** (multi hak-akses) yang dilengkapi berbagai fungsionalitas pendukung (seperti pembuatan jurnal kegiatan, catatan, logbook, dan forum diskusi). Terdapat beberapa hak akses (Roles) utama yaitu:
 
-you can install and configuration in this link [here](https://www.enterprisedb.com/postgres-tutorials/how-use-postgresql-django)
+1. **👨‍🎓 Mahasiswa (College Student)**: Dapat mendaftar, membuat laporan dan mengelola kegiatan logbook PKL.
+2. **👨‍🏫 Dosen (Lecturer)**: Memantau, mengarahkan, memberikan catatan, serta mengevaluasi proses kegiatan yang dilakukan oleh mahasiswa.
+3. **💼 Staf (Staff)**: Mengurus sistem administrasi secara umum dari Laboratorium Sosial.
+4. **🏢 Mitra**: Pihak eksternal tempat bernaungnya mahasiswa untuk melakukan kegiatan praktik/magang.
 
-It is recommended to **use env**, which can be found [here](https://www.petanikode.com/python-virtualenv/)
+---
 
-## Installing Pip
-pip is already installed if you are using Python 2 >=2.7.9 or Python 3 >=3.4 downloaded from python.org or if you are working in a Virtual Environment created by virtualenv or venv. Just make sure to upgrade pip.
+## 🛠 Teknologi yang Digunakan
 
-# Windows
-The Python installers for Windows include pip. You should be able to access pip using:
+Aplikasi ini dibangun menggunakan beberapa framework dan modul pustaka populer:
+- **Core / Backend:** Python 3, Django
+- **Database:** PostgreSQL (Production) / SQLite3 (Development)
+- **Frontend / Forms Visuals:** Django Crispy Forms (`crispy_bootstrap4`), Bootstrap Datepicker Plus
+- **Plugins & Libraries:** 
+  - `Pillow` (untuk manajemen unggah foto/gambar)
+  - `djangorestframework`
+  - `psycopg2` (Konektor database PostgreSQL)
+  - `coa-django-countable-field`
 
+---
+
+## 📋 Prasyarat Sistem
+
+Sebelum memulai pengembangan *(development)*, pastikan seluruh program pendukung berikut telah terinstall dengan baik pada komputer Anda:
+1. **Python** (Disarankan menggunakan versi `3.4` ke atas). Unduh di [python.org](https://www.python.org/downloads/).
+2. **PostgreSQL** (opsional, jika ingin menguji enviroment *Production* di lokal). Panduannya dapat dicek [di sini](https://www.enterprisedb.com/postgres-tutorials/how-use-postgresql-django).
+3. **Package Manager Pip** (`pip`) *(sudah terpasang otomatis dari Python 3)*, dan library **Virtual Environment**.
+
+---
+
+## ⚙️ Panduan Instalasi
+
+Ikuti langkah-langkah di bawah ini untuk mengatur dan meng-clone proyek dari tahap awal hingga siap dijalankan ke mesin lokal Anda (*Localhost*).
+
+### 1. Buat Virtual Environment 
+Sangat disarankan memakai Virtual Environment (`venv`) agar library pada sistem OS utama Anda tidak mengalami *conflict/error*.
+- **Di sistem Windows:**
+  ```bash
+  python -m venv env
+  env\Scripts\activate
+  ```
+- **Di sistem Linux / macOS:**
+  ```bash
+  python3 -m venv env
+  source env/bin/activate
+  ```
+
+### 2. Instalasi Kebutuhan Pustaka (Libraries)
+Lakukan sinkronisasi atau install keseluruhan pustaka/package (`pip` modules) yang disediakan dalam file `requirements.txt`:
 ```bash
-py -m pip --version
-pip 9.0.1 from c:\python36\lib\site-packages (Python 3.6.1)
+pip install -r requirements.txt
 ```
-You can make sure that pip is up-to-date by running:
+*(Catatan: Jika ada library yang error, lakukan pembaruan pip dengan perintah `python -m pip install --upgrade pip`).*
+
+### 3. Konfigurasi Database
+Project diatur koneksinya pada file di folder `SIM_PKL/settings.py`. Pada environment dev lokal Anda bebas menggunakan *SQLite* (bawaan Django). 
+*Note: Jika ingin menggunakan PostgreSQL, ubah parameter koneksi DB pada blok variabel `DATABASES`.*
+
+### 4. Lakukan Migrasi Database (*Migration*)
+Wajib untuk dijalankan sebelum pertama kali aplikasi dibuka agar arsitektur DB lengkap:
 ```bash
-py -m pip install --upgrade pip
-```
-
-# Linux and macOS
-
-Debian and most other distributions include a python-pip package, if you want to use the Linux distribution-provided versions of pip see Installing pip/setuptools/wheel with Linux Package Managers.
-
-You can also install pip yourself to ensure you have the latest version. It’s recommended to use the system pip to bootstrap a user installation of pip:
-
-```bash
-python3 -m pip install --user --upgrade pip
-```
-## Installing virtualenv
-
-virtualenv is used to manage Python packages for different projects. Using virtualenv allows you to avoid installing Python packages globally which could break system tools or other projects. You can install virtualenv using pip.
-
-On macOS and Linux:
-
-```bash
-python3 -m pip install --user virtualenv
-```
-On Windows
-
-```bash
-py -m pip install --user virtualenv
-```
-
-## Creating a virtual environment
-
-venv (for Python 3) and virtualenv (for Python 2) allow you to manage separate package installations for different projects. They essentially allow you to create a “virtual” isolated Python installation and install packages into that virtual installation. When you switch projects, you can simply create a new virtual environment and not have to worry about breaking the packages installed in the other environments. It is always recommended to use a virtual environment while developing Python applications.
-
-To create a virtual environment, go to your project’s directory and run venv. If you are using Python 2, replace venv with virtualenv in the below commands.
-
-On macOS and Linux:
-```bash
-python3 -m venv env
-```
-On Windows:
-```bash
-py -m venv env
-```
-
-## Install Packages
-
-To install all the required packages, run the command
-
-```bash
-pip3 install -p requirements.txt / pip3 install -r requirements.txt
-```
-then install pillow and datepicker plus, countible field, crispy forms
-
-click the following link
-
-1. Crispy form
-```bash
-pip3 install django-crispy-forms
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-2. Pillow 
-```bash
-python3 -m pip install --upgrade pip
-python3 -m pip install --upgrade Pillow
-```
+---
 
-3. Datepicker Plus
-```bash
-pip3 install django-bootstrap-datepicker-plus
-```
+## 🚀 Menjalankan Aplikasi
 
-4. Countible field
-```bash
-pip3 install coa-django-countable-field
-```
-
-### Add app name in settings.py:
-```bash
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'crispy_forms',
-    'bootstrap_datepicker_plus',
-    'accounts',
-    'countable_field',
-    'home',
-    'dosen',
-    'mahasiswa',
-    'catatan',
-    'mitra',
-    'forum',
-]
-```
-## Migrate the Project
-
-before you run this project you must to be migrate this data 
+Setelah semua instalasi dan DB ter-migrasi sukses, Anda dapat merestart server percobaan Django (*development server*):
 
 ```bash
-python3 manage.py migrate
+python manage.py runserver
 ```
 
-## Run the Project
+Akses secara lokal aplikasi melalui peramban (Web Browser) di alamat server:
+👉 **`http://localhost:8000/`** atau **`http://127.0.0.1:8000/`**
 
-to run the project, you can use python / python3 
+---
 
-```bash
-python3 manage.py runserver
+## 🔑 Akun Pengujian (Demo)
 
-```
-## Deploy
-this project has been deployed in Heroku (Cloud Application Platform) in this link [here](https://labsosv2.herokuapp.com/)
+*(Opsional: apabila Anda memakai dump SQL database bawaan)*. Anda dapat login ke dalam web SIM LABSOS memakai rincian percobaan berikut:
 
-This project has 3 roles, namely college student, lecturers and staff, 
-You can sign in with the account below :
+**👨‍🎓 College Student (Mahasiswa)**
+- Username / Akun: `user`
+- Password / Sandi: `praxis123`
+*(Bisa juga menggunakan fitur Register / Sign Up baru pada aplikasi)*
 
-### Collage Student
-- Username = user
-- Password = praxis123
+**👨‍🏫 Lecturer (Dosen)**
+- Username / Akun: `prof.tatam`
+- Password / Sandi: `praxis123`
 
-or you can sign up in this apllication
+**💼 Staff / Administrasi**
+- Username / Akun: `staf`
+- Password / Sandi: `praxis123`
 
-### Lectures 
-- Username = prof.tatam
-- Password = praxis123
+---
 
-### Staff 
-- Username = staf
-- Password = praxis123
+## 🌍 Deployment
+
+Sistem telah siap dan sangat mendukung integrasi *deployment* ke Cloud Platform seperti **Heroku**. Konfigurasi platform (*Procfile*) telah diletakkan di dalam direktori dasar proyek.
+- URL Pengujian Deployment Aplikasi: [https://labsosv2.herokuapp.com/](https://labsosv2.herokuapp.com/)
