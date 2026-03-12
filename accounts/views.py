@@ -63,6 +63,21 @@ def logoutUser(request):
 	return redirect('/accounts/')
 
 def accountSettings(req):
+	if req.method == 'POST':
+		req.user.first_name = req.POST.get('first_name', req.user.first_name)
+		req.user.last_name = req.POST.get('last_name', req.user.last_name)
+		req.user.email = req.POST.get('email', req.user.email)
+		req.user.save()
+		
+		biodata, created = UserProfile.objects.get_or_create(owner=req.user)
+		biodata.name = f"{req.user.first_name} {req.user.last_name}".strip()
+		biodata.phone = req.POST.get('phone', biodata.phone)
+		if 'profile_pic' in req.FILES:
+			biodata.profile_pic = req.FILES['profile_pic']
+		biodata.save()
+		messages.success(req, 'Profil berhasil diperbarui.')
+		return redirect('profile')
+
 	tasks = Pkl.objects.filter(owner=req.user)
 	forum = Forum.objects.filter().first()
 	biodata = UserProfile.objects.filter(owner=req.user).first()
@@ -74,9 +89,28 @@ def accountSettings(req):
 		'pkl' :pkl,
 		# 'dosen':dosen,
 		'biodata':biodata,
+		'active_page': 'profil'
 		})
 
 def accountSettings_staf(req):
+	if req.method == 'POST':
+		# Ambil input form
+		req.user.first_name = req.POST.get('first_name', req.user.first_name)
+		req.user.last_name = req.POST.get('last_name', req.user.last_name)
+		req.user.email = req.POST.get('email', req.user.email)
+		req.user.save()
+		
+		# Update profil / biodata
+		biodata, created = UserProfile.objects.get_or_create(owner=req.user)
+		biodata.name = f"{req.user.first_name} {req.user.last_name}".strip()
+		biodata.phone = req.POST.get('phone', biodata.phone)
+		if 'profile_pic' in req.FILES:
+			biodata.profile_pic = req.FILES['profile_pic']
+		biodata.save()
+		
+		messages.success(req, 'Profil Staf berhasil diperbarui.')
+		return redirect('profile_staf')
+
 	tasks = Pkl.objects.filter(owner=req.user)
 	forum = Forum.objects.filter().first()
 	biodata = UserProfile.objects.filter(owner=req.user).first()
@@ -88,8 +122,26 @@ def accountSettings_staf(req):
 		'pkl' :pkl,
 		# 'dosen':dosen,
 		'biodata':biodata,
+		'active_page': 'profil'
 		})
 def accountSettings_dosen(req):
+	if req.method == 'POST':
+		# Ambil input form
+		req.user.first_name = req.POST.get('first_name', req.user.first_name)
+		req.user.last_name = req.POST.get('last_name', req.user.last_name)
+		req.user.email = req.POST.get('email', req.user.email)
+		req.user.save()
+		
+		biodata, created = UserProfile.objects.get_or_create(owner=req.user)
+		biodata.name = f"{req.user.first_name} {req.user.last_name}".strip()
+		biodata.phone = req.POST.get('phone', biodata.phone)
+		if 'profile_pic' in req.FILES:
+			biodata.profile_pic = req.FILES['profile_pic']
+		biodata.save()
+		
+		messages.success(req, 'Profil Dosen berhasil diperbarui.')
+		return redirect('profile_dosen')
+
 	tasks = Pkl.objects.filter(owner=req.user)
 	forum = Forum.objects.filter().first()
 	biodata = UserProfile.objects.filter(owner=req.user).first()
@@ -101,6 +153,7 @@ def accountSettings_dosen(req):
 		'pkl' :pkl,
 		# 'dosen':dosen,
 		'biodata':biodata,
+		'active_page': 'profil'
 		})
 # def accountSettings(request):
 # 	customer = request.user.customer

@@ -1,153 +1,156 @@
-{% extends "base.html" %}
+{% extends "base_mahasiswa.html" %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Logbook Harian{% endblock %}
+{% block topbar_title %}Logbook Harian{% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h3 class="page-title">
-    <span class="page-title-icon bg-gradient-primary text-white mr-2">
-      <i class="mdi mdi-book"></i>
-    </span> Logbook </h3>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+  <div>
+    <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:-.3px;">Logbook
+      Harian</div>
+    <div style="font-size:.82rem;color:var(--gray400);margin-top:2px;">Catatan kegiatan PKL Anda setiap hari</div>
+  </div>
+
+  <div style="display:flex; gap:10px;">
+    <a href="/cetak/" target="_blank" class="btn-outline" style="border-color:var(--gray300); color:var(--gray600);">
+      <i class="bi bi-printer"></i> Cetak Laporan
+    </a>
+    {% if pkl and pkl.approve and pkl.approve2 %}
+    <button class="btn-g" onclick="openModal('modalAddLogbook')">
+      <i class="bi bi-plus-lg"></i> Tambah Catatan
+    </button>
+    {% else %}
+    <button class="btn-gray"
+      onclick="showToast('PKL Anda harus disetujui (ACC) terlebih dahulu sebelum bisa mengisi Logbook.', 'r')">
+      <i class="bi bi-plus-lg"></i> Tambah Catatan
+    </button>
+    {% endif %}
+  </div>
 </div>
-<div class="row" style="margin-top: 5%;">
-  <button type="button" class="btn btn-rounded" data-toggle="modal" data-target="#tambah"
-    style="background-color:#5e7188; color: whitesmoke; margin-left: 0%; margin-bottom: 20px;">
-    <span><span>&#43;</span><b> T U L I S </b></span>
-  </button>
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-body">
-        <table class="table table-striped">
-          {% regroup data by weekday as catatan_list %}
 
-          {% for catatan in catatan_list %}
-          <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="false">
+{% if not pkl or not pkl.approve or not pkl.approve2 %}
+<div class="alert-strip"
+  style="background:#fffbeb; border-color:#fde68a; border-radius:12px; padding:14px 18px; margin-bottom:20px; display:flex; gap:12px; align-items:flex-start;">
+  <i class="bi bi-exclamation-triangle-fill" style="color:#d97706; font-size:1.2rem; line-height:1;"></i>
+  <div>
+    <div style="color:#92400e; font-size:.9rem; font-weight:700; margin-bottom:2px;">Menu Logbook Dikunci</div>
+    <div style="color:#b45309; font-size:.82rem;">Anda belum dapat membuat logbook. Pastikan proposal Praktik Kerja
+      Lapangan (Labsos) Anda telah diajukan dan disetujui sepenuhnya oleh Dosen Pembimbing maupun Staf Labsos.</div>
+  </div>
+</div>
+{% endif %}
 
-            <!-- Accordion card -->
-            <div class="card">
-              <div class="card-header" role="tab" id="heading-{{d.id}}" style="background-color: #5e7188;">
-                <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse-{{d.id}}" aria-expanded="false"
-                  aria-controls="collapse-{{d.id}}">
-                  <h5 class="mb-0">
-                    <div class="row" style="color: white; font-size: medium;">
-                      <div class="col-sm-6">Minggu ke-{{catatan.grouper}}</div>
-                    </div>
-                  </h5>
-                </a>
-              </div>
-              <div id="collapse-{{d.id}}" class="collapse show" role="tabpanel" aria-labelledby="heading-{{d.id}}"
-                data-parent="#accordionEx">
-                <table class="table table-hover table-borderless" id="" width="100%" cellspacing="0">
-                  {% for d in catatan.list %}
-                  <tr data-toggle="modal" data-target="#detail-{{d.id}}">
-                    <td>{{forloop.counter}}</td>
-                    <td>{{d.waktu}}</td>
-                    <td>{{d.judul}}</td>
-                    <!-- <td>{{d.ket}}</td> -->
-                    <td>
-                      {% for img_obj in d.catatan.all %}
-                      <a href="{{img_obj}}">File {{forloop.counter}}</a>
-                      {% endfor %}
-                    </td>
-                    <td>{{d.selang}} menit</td>
-                  </tr>
-                  <!-- Modal Detail -->
-                  <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="detail">Detail Data</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <dd><i>{{d.waktu}} {{d.waktu_kegiatan}}</i></dd>
-                          <dt>{{d.judul}}</dt>
-                          <p>{{d.ket}}</p>
-                          {% for d in d.catatan.all %}
-                          <div class="col-12" style="text-align: center;"><img src="{{d}}" width="100%">
-                            <a href="{{d}}">File {{forloop.counter}}</a>
-                          </div>
-                          {% endfor %}
+<!-- Search -->
+<div style="display:flex;gap:10px;margin-bottom:18px;">
+  <input class="fi" style="max-width:280px;" type="text" placeholder="🔍  Cari catatan..." id="logSearch"
+    oninput="filterLogbook()">
+</div>
 
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger" data-toggle="modal"
-                            data-target="#delete-{{d.id}}">
-                            <i class="fas fa-trash-alt"></i></i></button>
-
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- modal delete -->
-                  <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="modal-body">
-                            <p> Do You want To delete
-                              <strong>{{d.id}}</strong>?</p>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                            No
-                          </button>
-                          <a href="/catatan/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {% endfor %}
-                </table>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
+{% if data %}
+<div id="logbookList">
+  {% for d in data %}
+  <div class="log-card" data-judul="{{ d.judul|lower }}" data-ket="{{ d.ket|lower }}">
+    <div class="log-date">
+      <div class="log-day">{{ d.tgl_kegiatan|date:"d" }}</div>
+      <div class="log-mon">{{ d.tgl_kegiatan|date:"M" }}</div>
+    </div>
+    <div class="log-divider"></div>
+    <div style="flex:1;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div class="log-title" style="margin-bottom:0;">{{ d.judul }}</div>
+        {% if d.status == 'acc' %}
+        <div class="chip ok"><i class="bi bi-check-circle-fill"></i> Disetujui</div>
+        {% elif d.status == 'tolak' %}
+        <div class="chip rej"><i class="bi bi-x-circle-fill"></i> Ditolak</div>
+        {% else %}
+        <div class="chip pend"><i class="bi bi-hourglass-split"></i> Menunggu</div>
+        {% endif %}
       </div>
-
-      <!-- Modal input -->
-      <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-md" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="input">Tambah Catatan</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                {% load crispy_forms_tags %}
-                {% csrf_token %}
-                {{ form|crispy }}
-                {{ form_catatan|crispy }}
-                {{ form_gambar|crispy }}
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Input</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div class="log-desc">{{ d.ket|truncatechars:180 }}</div>
+      <div class="log-foot">
+        <span class="log-dur"><i class="bi bi-clock"></i> {{ d.selang }} menit</span>
+        {% for img in d.catatan.all %}
+        <a href="{{ img.upload_img.url }}" target="_blank"
+          style="display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--g600);text-decoration:none;">
+          <i class="bi bi-image"></i> Foto {{ forloop.counter }}
+        </a>
+        {% endfor %}
+        <a href="/catatan/{{ d.id }}/delete" class="btn-red" style="padding:4px 10px;font-size:.73rem;"
+          onclick="return confirm('Hapus catatan \'{{ d.judul }}\'?')">
+          <i class="bi bi-trash3"></i>
+        </a>
       </div>
-      <!-- </div>
-            </div> -->
     </div>
   </div>
-  {% endblock %}
+  {% endfor %}
+</div>
+{% else %}
+<div class="card-box">
+  <div class="empty-st">
+    <i class="bi bi-journal"></i>
+    <p>Belum ada catatan. Mulai dokumentasikan kegiatan PKL Anda!</p>
+    {% if pkl and pkl.approve and pkl.approve2 %}
+    <button class="btn-g" style="margin-top:14px;" onclick="openModal('modalAddLogbook')">
+      <i class="bi bi-plus-lg"></i> Buat Catatan Pertama
+    </button>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
 
+{% block modals %}
+<!-- Modal Tambah Catatan -->
+<div class="modal-overlay" id="modalAddLogbook">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title"><i class="bi bi-journal-plus" style="color:var(--g600);"></i> Tambah Catatan Kegiatan
+      </div>
+      <button class="modal-close" onclick="closeModal('modalAddLogbook')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <form action="/catatan/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin-bottom:14px;">
+          <label class="fl">Judul Kegiatan</label>
+          <input class="fi" type="text" name="judul" placeholder="Contoh: Observasi Lapangan RT 04" required>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label class="fl">Keterangan Kegiatan <span style="color:var(--gray400);font-weight:400;">(maks. 500
+              kata)</span></label>
+          <textarea class="fi" name="ket" rows="4" placeholder="Deskripsikan kegiatan yang dilakukan hari ini..."
+            required></textarea>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label class="fl">Durasi Kegiatan (dalam menit)</label>
+          <input class="fi" type="number" name="selang" placeholder="Contoh: 120" min="1" required>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label class="fl">Foto Kegiatan (opsional, bisa pilih lebih dari satu)</label>
+          <input class="fi" type="file" name="upload_img" multiple accept="image/*" style="padding:7px 12px;">
+          <div style="font-size:.7rem;color:var(--gray400);margin-top:4px;">JPG, PNG · Otomatis dikompres jika &gt;300KB
+          </div>
+        </div>
+        <div class="modal-foot" style="padding:0;border:none;margin-top:4px;">
+          <button type="button" class="btn-gray" onclick="closeModal('modalAddLogbook')">Batal</button>
+          <button type="submit" class="btn-g"><i class="bi bi-save"></i> Simpan Catatan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
-  {% block script %}
-  {% endblock %}
+{% block extra_js %}
+<script>
+  function filterLogbook() {
+    const q = document.getElementById('logSearch').value.toLowerCase();
+    document.querySelectorAll('#logbookList .log-card').forEach(card => {
+      const judul = card.dataset.judul || '';
+      const ket = card.dataset.ket || '';
+      card.style.display = (!q || judul.includes(q) || ket.includes(q)) ? '' : 'none';
+    });
+  }
+</script>
+{% endblock %}

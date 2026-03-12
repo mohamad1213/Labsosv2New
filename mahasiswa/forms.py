@@ -10,8 +10,8 @@ class PklForm(ModelForm):
         model = models.Pkl
         exclude = [ 'approve','catatan','reject','owner','create_time','complete_time','approve2','reject2']
         widgets = {
-            'tanggal_mulai': DatePickerInput(format='%d-%m-%Y').start_of('event days'),
-            'tanggal_selesai': DatePickerInput(format='%d-%m-%Y').end_of('event days'),
+            'tanggal_mulai': DatePickerInput(format='%d-%m-%Y'),
+            'tanggal_selesai': DatePickerInput(format='%d-%m-%Y'),
         }
 class RejectForm(ModelForm):
     class Meta:
@@ -26,8 +26,8 @@ class UpdateForm(ModelForm):
         model = models.Pkl
         exclude = [ 'approve','catatan','reject','owner','create_time','complete_time','approve2','reject2']
         widgets = {
-            'tanggal_mulai': DatePickerInput(format='%d-%m-%Y').start_of('event days'),
-            'tanggal_selesai': DatePickerInput(format='%d-%m-%Y').end_of('event days'),
+            'tanggal_mulai': DatePickerInput(format='%d-%m-%Y'),
+            'tanggal_selesai': DatePickerInput(format='%d-%m-%Y'),
         }
 # class UpdateForm(ModelForm):
 #     class Meta:

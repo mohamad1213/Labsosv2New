@@ -14,7 +14,12 @@ class Catatan(models.Model):
     judul = models.CharField(max_length=100)
     ket = models.TextField(max_length=500, help_text="maksimal 500 kata")
     selang = models.IntegerField(help_text="Dalam Menit")
-    
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('acc', 'Disetujui'),
+        ('tolak', 'Ditolak'),
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 class Gambar(models.Model):
     upload_img = models.FileField(default='', upload_to='images/', null=False, blank=True)
     catatan = models.ForeignKey(Catatan, on_delete=models.CASCADE, related_name='catatan')

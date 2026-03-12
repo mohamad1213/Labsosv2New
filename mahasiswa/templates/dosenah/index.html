@@ -1,104 +1,126 @@
 {% extends "base_dosen.html" %}
+
+{% block page_title %}SIM LABSOS v2 — Mahasiswa Bimbingan{% endblock %}
+{% block topbar_title %}Mahasiswa Bimbingan & Review PKL{% endblock %}
+
 {% block content %}
-<div class="page-header">
-  <h3 class="page-title">
-    <span class="page-title-icon bg-gradient-success text-white mr-2">
-      <i class="mdi mdi mdi-account-check"></i>
-    </span> Data Peserta Labsos </h3>
-</div>
-  <div class="row" style="margin-top: 5%;">
-  <!-- <button type="button" class="btn-primary" onclick="history.back();">
-    <i class="fas fa-arrow-left"></i> Previous
-  </button> -->
-  <div class="table-responsive">
-    <table class="table table-hover" id="" width="100%" cellspacing="2">
-      <thead>
-        <tr style="background-color: #625f53; color: aliceblue">
-          <th>No</th>
-          <th>Nim</th>
-          <th>Judul</th>
-          <th>Nama Mitra</th>
-          <th>Tanggal Pelaksanaan</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+<div
+  style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:-.3px;margin-bottom:4px;">
+  Mahasiswa Bimbingan</div>
+<div style="font-size:.82rem;color:var(--gray400);margin-bottom:18px;">Daftar mahasiswa yang terdaftar dalam bimbingan
+  Anda</div>
+
+<div class="card-box">
+  <div class="cb-head">
+    <div class="cb-title"><i class="bi bi-people"></i> Data Peserta Labsos</div>
+  </div>
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Mahasiswa</th>
+        <th>Judul PKL</th>
+        <th>Mitra</th>
+        <th>Periode</th>
+        <th>Staf</th>
+        <th>Dosen</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for d in data %}
       <tr>
-        <td>{{forloop.counter}}</td>
-        <td>{{d.owner}}</td>
-        <td><a href="/dosenah/{{d.id}}">{{d.judul}}</a></td>
-        <td>{{d.nama_mitra}}</td>
-        <td>{{d.tanggal_mulai}} - {{d.tanggal_selesai}}</td>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div class="mc">
+            <div>
+              <div class="m-nm">{{ d.owner.first_name }} {{ d.owner.last_name|default:d.owner.username }}</div>
+              <div class="m-ni" style="font-family:monospace;">{{ d.owner.username }}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-weight:500;max-width:250px;">
+          <a href="/dosenah/{{d.id}}" style="color:var(--gray700);text-decoration:none;">{{ d.judul }}</a>
+        </td>
+        <td style="color:var(--gray500);font-size:.8rem;">{{ d.nama_mitra.nama_mitra|default:d.nama_mitra }}</td>
+        <td style="color:var(--gray500);font-size:.8rem;">{{ d.tanggal_mulai|date:"d M Y" }} - <br> 
+          {{d.tanggal_selesai|date:"d M Y" }}</td>
         <td>
           {% if d.approve == True %}
-          <span class="text-success">Approved</span>
-          {% elif d.approve == False and d.reject == True %}
-          <span class="text-danger">Reject</span>
-          {% elif d.reject == False and d.approve == False %}
-          <span class="text-warning">Process</span>
+          <span class="chip ok">OK</span>
+          {% elif d.reject == True %}
+          <span class="chip rej">Reject</span>
+          {% else %}
+          <span class="chip pend">Wait</span>
           {% endif %}
         </td>
         <td>
-          <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon" data-toggle="modal"
-            data-target="#delete-{{d.id}}">
-            <i class="mdi mdi-delete"></i></button>
+          {% if d.approve2 == True %}
+          <span class="chip ok">Approved</span>
+          {% elif d.reject2 == True %}
+          <span class="chip rej">Reject</span>
+          {% else %}
+          <span class="chip pend">Process</span>
+          {% endif %}
+        </td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            {% if d.approve and d.approve2 %}
+            <span class="chip ok" style="background:var(--g700);color:white;padding:5px 10px;font-size:0.7rem;">
+              <i class="bi bi-play-fill"></i> PKL BERJALAN
+            </span>
+            {% else %}
+              {% if d.approve2 == False %}
+              <button class="btn-g" style="font-size:.74rem;padding:5px 8px;background:var(--g600);" 
+                onclick="if(confirm('Setujui pengajuan PKL ini?')) window.location.href='/dosenah/{{d.id}}/approve/'" title="Setujui">
+                <i class="bi bi-check-lg"></i>
+              </button>
+              {% endif %}
+              
+              {% if d.reject2 == False %}
+              <button class="btn-outline" style="font-size:.74rem;padding:5px 8px;color:#d97706;border-color:#fbbf24;"
+                onclick="document.getElementById('reject-{{d.id}}').classList.add('open')" title="Tolak">
+                <i class="bi bi-x-lg"></i>
+              </button>
+              {% endif %}
+            {% endif %}
+          </div>
         </td>
       </tr>
-      <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="delete">Delete Data Peserta Labsos</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+
+      <!-- MODAL: Tolak PKL -->
+      <div class="modal-overlay" id="reject-{{d.id}}">
+        <div class="modal-box" style="max-width:440px;">
+          <form action="/dosenah/{{d.id}}/reject/" method="POST">
+            {% csrf_token %}
+            <div class="modal-head">
+              <div class="modal-title" style="color:#d97706;"><i class="bi bi-exclamation-circle-fill"></i> Tolak Pengajuan PKL</div>
+              <button type="button" class="modal-close" onclick="document.getElementById('reject-{{d.id}}').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
-              <div class="modal-body">
-                <p> Do You want To delete
-                  <strong>{{d.judul}}</strong>?</p>
+              <div style="font-size:.86rem;color:var(--gray600);margin-bottom:12px;">Berikan alasan penolakan untuk <strong>{{d.owner.first_name}}</strong>:</div>
+              <div class="form-group">
+                <textarea name="catatan" class="fi" placeholder="Masukkan alasan penolakan..." required style="min-height:120px;"></textarea>
               </div>
             </div>
-            <div class="modal-footer">
-              <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                No
-              </button>
-              <a href="/dosenah/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+            <div class="modal-foot">
+              <button type="button" class="btn-gray" onclick="document.getElementById('reject-{{d.id}}').classList.remove('open')">Batal</button>
+              <button type="submit" class="btn-red" style="background:#d97706;border-color:#d97706;color:white;">Tolak Pengajuan</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
-      <!-- Modal reject -->
-      <div class="modal fade" id="reject-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="input">Reject</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form action="/mahasiswas/{{d.id}}/reject/" method="post" class="mt-3" enctype="multipart/form-data">
-                {% load crispy_forms_tags %}
-                {% csrf_token %}
-                {{ form_reject|crispy }}
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" href=/mahasiswas/{{d.id}}/reject/ class="btn btn-warning">
-                    <i class="fas fa-minus-circle"></i>
-                  </button>
-                </div>
-              </form>
-            </div>
+      {% empty %}
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            <i class="bi bi-people"></i>
+            <p>Tidak ada mahasiswa ditemukan</p>
           </div>
-        </div>
-      </div>
+        </td>
+      </tr>
       {% endfor %}
-    </table>
-  </div>
+    </tbody>
+  </table>
 </div>
 {% endblock %}

@@ -1,152 +1,109 @@
 {% extends "base_dosen.html" %}
 
+{% block page_title %}SIM LABSOS v2 — Logbook Mahasiswa{% endblock %}
+{% block topbar_title %}Logbook Mahasiswa{% endblock %}
+
 {% block content %}
-<div class="page-header">
-  <h3 class="page-title">
-    <span class="page-title-icon bg-gradient-primary text-white mr-2">
-      <i class="mdi mdi-book"></i>
-    </span> Logbook </h3>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+  <div>
+    <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:-.3px;">Logbook
+      Mahasiswa</div>
+    <div style="font-size:.82rem;color:var(--gray400);margin-top:2px;">Monitor dan evaluasi catatan absensi harian
+      mahasiswa bimbingan Anda</div>
+  </div>
 </div>
-<div class="row" style="margin-top: 5%;">
-  <button type="button" class="btn btn-rounded" data-toggle="modal" data-target="#tambah"
-  style="background-color:#5e7188; color: whitesmoke; margin-left: 0%; margin-bottom: 20px;">
-  <span><span>&#43;</span><b> T U L I S </b></span>
-  </button>
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-body">
-        <table class="table table-striped">
-          {% regroup data by week as catatan_weekly %}
 
-          {% for catatan in catatan_weekly %}
-          <!-- {{catatan}} -->
-          <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="false">
-
-            <!-- Accordion card -->
-            <div class="card">
-              <!-- Card header -->
-              <div class="card-header" role="tab" id="heading-{{d.id}}" style="background-color: #625f53;">
-                <a data-toggle="collapse" data-parent="#accordionEx" href="#collapse-{{d.id}}" aria-expanded="false"
-                  aria-controls="collapse-{{d.id}}">
-                  <h5 class="mb-0">
-                    <div class="row" style="color: white; font-size: medium;">
-                      <div class="col-sm-6">Hari ke-{{forloop.counter}}</div>
-                    </div>
-                  </h5>
-                </a>
-              </div>
-              <div id="collapse-{{d.id}}" class="collapse show" role="tabpanel" aria-labelledby="heading-{{d.id}}"
-                data-parent="#accordionEx">
-                <table class="table table-hover table-borderless" id="" width="100%" cellspacing="0">
-                  {% for d in catatan.list %}
-                  <tr data-toggle="modal" data-target="#detail-{{d.id}}">
-                    <td>{{forloop.counter}}</td>
-                    <td>{{d.waktu}}</td>
-                    <td>{{d.judul}}</td>
-                    <td>
-                      {% for img_obj in d.catatan.all %}
-                      <a href="{{img_obj}}">File {{forloop.counter}}</a>
-                      {% endfor %}
-                    </td>
-                  </tr>
-                  <!-- Modal Detail -->
-                  <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="detail">Detail Data</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <dd><i>{{d.waktu}}</i></dd>
-                          <dt>{{d.judul}}</dt>
-                          <p>{{d.ket}}</p>
-                          {% for d in d.catatan.all %}
-                          <div class="col-12" style="text-align: center;"><img src="{{d}}" width="100%">
-                            <a href="{{d}}">File {{forloop.counter}}</a>
-                          </div>
-                          {% endfor %}
-
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger" data-toggle="modal"
-                            data-target="#delete-{{d.id}}">
-                            <i class="fas fa-trash-alt"></i></i></button>
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- modal delete -->
-                  <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="modal-body">
-                            <p> Do You want To delete
-                              <strong>{{d.id}}</strong>?</p>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                            No
-                          </button>
-                          <a href="/catatan/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {% endfor %}
-                </table>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
+<div id="logbookFullList">
+  {% for log in data %}
+  <div class="card-box" style="margin-bottom:12px; overflow:visible;">
+    <div style="padding:16px 20px; display:flex; gap:16px; align-items:flex-start;">
+      <!-- Avatar Mahasiswa -->
+      <div
+        style="background:linear-gradient(135deg,var(--g700),var(--g400));width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:0.9rem;color:white;flex-shrink:0;box-shadow:0 4px 10px rgba(22,163,74,0.2);">
+        {{ log.owner.username|upper|slice:":2" }}
       </div>
 
-      <!-- Modal input -->
-      <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="input">Tambah Catatan</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <!-- Konten Logbook -->
+      <div style="flex:1;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div style="font-weight:800;font-size:.95rem;color:var(--gray800);">{{ log.judul }}</div>
+            <div style="font-size:.76rem;color:var(--gray500);margin-top:4px;display:flex;align-items:center;gap:6px;">
+              <span style="font-weight:700;color:var(--gray700);">{{ log.owner.first_name }} {{ log.owner.last_name|default:log.owner.username }}</span>
+              &bull; {{ log.waktu|date:"d M Y, H:i" }} &bull; <i class="bi bi-clock"></i> {{ log.selang }} menit
             </div>
-            <div class="modal-body">
-              <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                {% load crispy_forms_tags %}
-                {% csrf_token %}
-                {{ form|crispy }}
-                {{ form_catatan|crispy }}
-                {{ form_gambar|crispy }}
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Input</button>
-                </div>
-              </form>
-            </div>
+          </div>
+
+          <!-- Status Badge -->
+          <div>
+            {% if log.status == 'acc' %}
+            <div class="chip ok"><i class="bi bi-check-circle-fill"></i> Disetujui</div>
+            {% elif log.status == 'tolak' %}
+            <div class="chip rej"><i class="bi bi-x-circle-fill"></i> Ditolak</div>
+            {% else %}
+            <div class="chip pend"><i class="bi bi-hourglass-split"></i> Menunggu</div>
+            {% endif %}
           </div>
         </div>
+
+        <div
+          style="font-size:.84rem;color:var(--gray600);line-height:1.6;margin-top:12px;background:var(--gray50);padding:12px;border-radius:8px;border:1px solid var(--gray100);">
+          {{ log.ket|default:"-" }}
+        </div>
+
+        {% if log.catatan.all.exists %}
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          {% for img in log.catatan.all %}
+          <a href="{{ img.upload_img.url }}" target="_blank"
+            style="display:inline-flex;align-items:center;gap:4px;font-size:.72rem;background:white;border:1px solid var(--gray200);border-radius:6px;padding:4px 8px;color:var(--g700);text-decoration:none;font-weight:600;transition:all 0.15s;">
+            <i class="bi bi-image"></i> Lihat Lampiran
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Tindakan Evaluasi -->
+        <div style="margin-top:16px; border-top:1px dashed var(--gray200); padding-top:12px; display:flex; gap:8px;">
+          <form action="/catatan.d/{{ log.id }}/evaluate/" method="POST" style="margin:0;">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="acc">
+            <button type="submit" class="btn-g" style="padding:5px 14px; font-size:0.78rem; border-radius:6px;" {% if log.status == 'acc' %}disabled style="opacity:0.5;cursor:not-allowed;" {% endif %}>
+              <i class="bi bi-check-lg"></i> Terima
+            </button>
+          </form>
+
+          <form action="/catatan.d/{{ log.id }}/evaluate/" method="POST" style="margin:0;">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="tolak">
+            <button type="submit" class="btn-red" style="padding:5px 14px; font-size:0.78rem; border-radius:6px;" {% if log.status == 'tolak' %}disabled style="opacity:0.5;cursor:not-allowed;" {% endif %}>
+              <i class="bi bi-x-lg"></i> Tolak
+            </button>
+          </form>
+
+          {% if log.status != 'pending' %}
+          <form action="/catatan.d/{{ log.id }}/evaluate/" method="POST" style="margin:0;">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="pending">
+            <button type="submit" class="btn-gray" style="padding:5px 14px; font-size:0.78rem; border-radius:6px;"
+              title="Kembalikan status menjadi menunggu">
+              <i class="bi bi-arrow-counterclockwise"></i> Reset
+            </button>
+          </form>
+          {% endif %}
+        </div>
+
       </div>
     </div>
+  </div>
+  {% empty %}
+  <div class="card-box">
+    <div style="padding:40px 20px; text-align:center;">
+      <i class="bi bi-journal-x" style="font-size:2.5rem; color:var(--gray300); margin-bottom:12px; display:block;"></i>
+      <div style="font-weight:800; font-size:1rem; color:var(--gray700); margin-bottom:4px;">Belum ada logbook</div>
+      <p style="font-size:0.85rem; color:var(--gray500);">Mahasiswa bimbingan Anda belum mengisi logbook atau Anda belum
+        membimbing mahasiswa satupun.</p>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-</div>
-</div>
-{% endblock %}
-
-
-{% block script %}
 {% endblock %}

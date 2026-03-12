@@ -2,7 +2,109 @@
 {% load static %}
 
 {% block content %}
+<div style="margin-bottom: 24px;">
+    <h2 style="font-family:'Cabinet Grotesk',sans-serif;font-weight:900;color:var(--gray800);margin:0;">Dashboard Dosen</h2>
+    <p style="color:var(--gray400);font-size:0.85rem;margin:5px 0 0;">Selamat datang kembali! Berikut ringkasan bimbingan Anda hari ini.</p>
+</div>
 
+<!-- KPI ROW -->
+<div class="row g-4" style="margin-bottom: 24px;">
+    <div class="col-md-4">
+        <div class="card-box" style="padding: 20px; border-left: 5px solid var(--g600);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 50px; height: 50px; border-radius: 12px; background: var(--g100); color: var(--g700); display: grid; place-items: center; font-size: 1.5rem;">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--gray500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Mahasiswa Bimbingan</div>
+                    <div style="font-size: 1.8rem; font-weight: 1000; color: var(--gray800); font-family: 'Cabinet Grotesk';">{{ total_mhs }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-box" style="padding: 20px; border-left: 5px solid var(--blue);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 50px; height: 50px; border-radius: 12px; background: #eff6ff; color: var(--blue); display: grid; place-items: center; font-size: 1.5rem;">
+                    <i class="bi bi-play-circle"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--gray500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">PKL Sedang Berjalan</div>
+                    <div style="font-size: 1.8rem; font-weight: 1000; color: var(--gray800); font-family: 'Cabinet Grotesk';">{{ mhs_aktif }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-box" style="padding: 20px; border-left: 5px solid var(--amber);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 50px; height: 50px; border-radius: 12px; background: #fffbeb; color: var(--amber); display: grid; place-items: center; font-size: 1.5rem;">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--gray500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Menunggu Review</div>
+                    <div style="font-size: 1.8rem; font-weight: 1000; color: var(--gray800); font-family: 'Cabinet Grotesk';">{{ mhs_pending }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Tabel Mahasiswa -->
+    <div class="col-lg-8">
+        <div class="card-box">
+            <div class="cb-head">
+                <div class="cb-title"><i class="bi bi-journal-text"></i> Aktivitas Logbook Terbaru</div>
+                <a href="/catatan.d/" class="btn-outline" style="font-size: 0.75rem; padding: 4px 10px;">Lihat Semua</a>
+            </div>
+            <div class="cb-body" style="padding: 0;">
+                {% if latest_logs %}
+                    {% for log in latest_logs %}
+                    <div style="padding: 16px 20px; border-bottom: 1px solid var(--gray100); display: flex; gap: 15px; align-items: flex-start;">
+                        <div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--g600), var(--g400)); color: white; display: grid; place-items: center; font-weight: 800; font-size: 0.8rem;">
+                            {{ log.owner.username|upper|slice:":2" }}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--gray800);">{{ log.judul }}</div>
+                                <div style="font-size: 0.7rem; color: var(--gray400);">{{ log.waktu|timesince }} yang lalu</div>
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--gray500); margin-top: 2px;">Oleh: <strong>{{ log.owner.first_name }} {{ log.owner.last_name|default:log.owner.username }}</strong></div>
+                            <div style="font-size: 0.82rem; color: var(--gray600); margin-top: 8px; line-height: 1.5;">{{ log.ket|truncatechars:120 }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="padding: 40px; text-align: center; color: var(--gray400);">
+                        <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                        Belum ada aktivitas logbook dari mahasiswa Anda.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Shortcut Section -->
+    <div class="col-lg-4">
+        <div class="card-box">
+            <div class="cb-head">
+                <div class="cb-title"><i class="bi bi-lightning-fill"></i> Akses Cepat</div>
+            </div>
+            <div class="cb-body">
+                <a href="/dosenah/" class="btn-g" style="width: 100%; justify-content: center; margin-bottom: 10px;">
+                    <i class="bi bi-people"></i> Review Mahasiswa
+                </a>
+                <a href="/catatan.d/" class="btn-outline" style="width: 100%; justify-content: center; margin-bottom: 10px;">
+                    <i class="bi bi-journal-check"></i> Evaluasi Logbook
+                </a>
+                <a href="/accounts/profile" class="btn-gray" style="width: 100%; justify-content: center;">
+                    <i class="bi bi-person-gear"></i> Pengaturan Profil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}

@@ -1,312 +1,104 @@
-{% extends "base_staf.html"%}
-{% load static %}
+{% extends "base_staf.html" %}
+
+{% block page_title %}SIM LABSOS v2 — Panel Staf{% endblock %}
+{% block topbar_title %}Panel Administrasi Staf{% endblock %}
+
 {% block content %}
-      <div class="page-header">
-        <h3 class="page-title">
-          <span class="page-title-icon bg-gradient-primary text-white mr-2">
-            <i class="mdi mdi-home"></i>
-          </span> Dashboard  </h3>
+<!-- ══════ DASHBOARD ══════ -->
+<section class="page-section active" id="sec-dashboard">
+  <div
+    style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:-.3px;margin-bottom:16px;">
+    Overview Sistem</div>
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="ki g"><i class="bi bi-briefcase-fill"></i></div><span class="kpi-tr tg" id="kTotalPct">+12%</span>
       </div>
-      <div class="row">
-        <div class="col-md-4 stretch-card grid-margin">
-          <div class="card bg-gradient-danger card-img-holder text-white">
-            <div class="card-body">
-              <img src="{% static 'css/assets/images/dashboard/circle.svg' %}" class="card-img-absolute" alt="circle-image" />
-              <h4 class="font-weight-normal mb-3">Total Catatan Harian <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-              </h4>
-              <h2 class="mb-5">60 Inputan</h2>
-              <h6 class="card-text">Increased by 60%</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 stretch-card grid-margin">
-          <div class="card bg-gradient-info card-img-holder text-white">
-            <div class="card-body">
-              <img src="{% static 'css/assets/images/dashboard/circle.svg' %}" class="card-img-absolute" alt="circle-image" />
-              <h4 class="font-weight-normal mb-3">Total Mahasiswa Labsos yang sama<i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-              </h4>
-              <h2 class="mb-5">7</h2>
-              <h6 class="card-text">Decreased by 100%</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 stretch-card grid-margin">
-          <div class="card bg-gradient-success card-img-holder text-white">
-            <div class="card-body">
-              <img src="{% static 'css/assets/images/dashboard/circle.svg' %}" class="card-img-absolute" alt="circle-image" />
-              <h4 class="font-weight-normal mb-3">Dosen Mentor <i class="mdi mdi-diamond mdi-24px float-right"></i>
-              </h4>
-              <h2 class="mb-5">3</h2>
-              <h6 class="card-text">Increased by 100%</h6>
-            </div>
-          </div>
-        </div>
+      <div class="kpi-v" id="kTotal">{{ k_total|default:"34" }}</div>
+      <div class="kpi-l">Total PKL</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="ki a"><i class="bi bi-hourglass-split"></i></div><span class="kpi-tr ta" id="kPendTrend">Perlu
+          Aksi</span>
       </div>
-      <div class="row">
-        <div class="col-md-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="clearfix">
-                <h4 class="card-title float-left">165 activity</h4>
-                <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-right"></div>
-              </div>
-              <canvas id="visit-sale-chart" class="mt-4"></canvas>
-            </div>
-          </div>
-        </div>
+      <div class="kpi-v" id="kPend">{{ k_pend|default:"3" }}</div>
+      <div class="kpi-l">Pending Review</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="ki g"><i class="bi bi-check-circle-fill"></i></div><span class="kpi-tr tg">Aktif</span>
       </div>
-      <!-- <div class="row">
-        <div class="col-12 grid-margin">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Recent Tickets</h4>
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th> Assignee </th>
-                      <th> Subject </th>
-                      <th> Status </th>
-                      <th> Last Update </th>
-                      <th> Tracking ID </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <img src="{% static 'css/assets/images/faces/face1.jpg' %}" class="mr-2" alt="image"> David Grey </td>
-                      <td> Fund is not recieved </td>
-                      <td>
-                        <label class="badge badge-gradient-success">DONE</label>
-                      </td>
-                      <td> Dec 5, 2017 </td>
-                      <td> WD-12345 </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="{% static 'css/assets/images/faces/face2.jpg' %}" class="mr-2" alt="image"> Stella Johnson </td>
-                      <td> High loading time </td>
-                      <td>
-                        <label class="badge badge-gradient-warning">PROGRESS</label>
-                      </td>
-                      <td> Dec 12, 2017 </td>
-                      <td> WD-12346 </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="{% static 'css/assets/images/faces/face3.jpg' %}" class="mr-2" alt="image"> Marina Michel </td>
-                      <td> Website down for one week </td>
-                      <td>
-                        <label class="badge badge-gradient-info">ON HOLD</label>
-                      </td>
-                      <td> Dec 16, 2017 </td>
-                      <td> WD-12347 </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="{% static 'css/assets/images/faces/face4.jpg' %}" class="mr-2" alt="image"> John Doe </td>
-                      <td> Loosing control on server </td>
-                      <td>
-                        <label class="badge badge-gradient-danger">REJECTED</label>
-                      </td>
-                      <td> Dec 3, 2017 </td>
-                      <td> WD-12348 </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="kpi-v" id="kAppr">{{ k_appr|default:"26" }}</div>
+      <div class="kpi-l">PKL Disetujui</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="ki r"><i class="bi bi-x-circle-fill"></i></div><span class="kpi-tr tr" id="kRejTr">Total</span>
       </div>
-      <div class="row">
-        <div class="col-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Recent Updates</h4>
-              <div class="d-flex">
-                <div class="d-flex align-items-center mr-4 text-muted font-weight-light">
-                  <i class="mdi mdi-account-outline icon-sm mr-2"></i>
-                  <span>jack Menqu</span>
-                </div>
-                <div class="d-flex align-items-center text-muted font-weight-light">
-                  <i class="mdi mdi-clock icon-sm mr-2"></i>
-                  <span>October 3rd, 2018</span>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-6 pr-1">
-                  <img src="{% static 'css/assets/images/dashboard/img_1.jpg' %}" class="mb-2 mw-100 w-100 rounded" alt="image">
-                  <img src="{% static 'css/assets/images/dashboard/img_4.jpg' %}" class="mw-100 w-100 rounded" alt="image">
-                </div>
-                <div class="col-6 pl-1">
-                  <img src="{% static 'css/assets/images/dashboard/img_2.jpg' %}" class="mb-2 mw-100 w-100 rounded" alt="image">
-                  <img src="{% static 'css/assets/images/dashboard/img_3.jpg' %}" class="mw-100 w-100 rounded" alt="image">
-                </div>
-              </div>
-              <div class="d-flex mt-5 align-items-top">
-                <img src="{% static 'css/assets/images/faces/face3.jpg' %}" class="img-sm rounded-circle mr-3" alt="image">
-                <div class="mb-0 flex-grow">
-                  <h5 class="mr-2 mb-2">School Website - Authentication Module.</h5>
-                  <p class="mb-0 font-weight-light">It is a long established fact that a reader will be distracted by the readable content of a page.</p>
-                </div>
-                <div class="ml-auto">
-                  <i class="mdi mdi-heart-outline text-muted"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="kpi-v" id="kRej">{{ k_rej|default:"5" }}</div>
+      <div class="kpi-l">PKL Ditolak</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <div class="ki b"><i class="bi bi-building"></i></div><span class="kpi-tr tg">Aktif</span>
       </div>
-      <div class="row">
-        <div class="col-md-7 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Project Status</h4>
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th> # </th>
-                      <th> Name </th>
-                      <th> Due Date </th>
-                      <th> Progress </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td> 1 </td>
-                      <td> Herman Beck </td>
-                      <td> May 15, 2015 </td>
-                      <td>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td> 2 </td>
-                      <td> Messsy Adam </td>
-                      <td> Jul 01, 2015 </td>
-                      <td>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td> 3 </td>
-                      <td> John Richards </td>
-                      <td> Apr 12, 2015 </td>
-                      <td>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td> 4 </td>
-                      <td> Peter Meggik </td>
-                      <td> May 15, 2015 </td>
-                      <td>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td> 5 </td>
-                      <td> Edward </td>
-                      <td> May 03, 2015 </td>
-                      <td>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td> 5 </td>
-                      <td> Ronald </td>
-                      <td> Jun 05, 2015 </td>
-                      <td>
-                        <div class="progress">
-                          <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-5 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title text-white">Todo</h4>
-              <div class="add-items d-flex">
-                <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
-                <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
-              </div>
-              <div class="list-wrapper">
-                <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li class="completed">
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" checked> Call John </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Create invoice </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Print Statements </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li class="completed">
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Pick up kids from school </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div> -->
-        <!-- </div> -->
-      <!-- </div>
-    </div> -->
-    <!-- content-wrapper ends -->
-    <!-- partial:partials/_footer.html -->
-    <footer class="footer">
-      <div class="d-sm-flex justify-content-center justify-content-sm-between">
-        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright ©Informatika 2017</span>
-        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">ICT UNU Yogyakarta <i class="mdi mdi-heart text-danger"></i></span>
-      </div>
-    </footer>
-    <!-- partial -->
+      <div class="kpi-v" id="kMitra">{{ k_mitra|default:"5" }}</div>
+      <div class="kpi-l">Mitra</div>
+    </div>
   </div>
+
+  <div class="three-col">
+    <div class="card-box">
+      <div class="cb-head">
+        <div class="cb-title"><i class="bi bi-activity"></i> Aktivitas Terbaru</div><a href="/mahasiswas/"
+          class="lm">PKL <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div id="dashFeed"></div>
+    </div>
+    <div class="card-box">
+      <div class="cb-head">
+        <div class="cb-title"><i class="bi bi-building"></i> Mitra</div><a href="/mitra/" class="lm">Kelola <i
+            class="bi bi-arrow-right"></i></a>
+      </div>
+      <div id="dashMitra"></div>
+    </div>
+    <div class="card-box">
+      <div class="cb-head">
+        <div class="cb-title"><i class="bi bi-person-badge-fill"></i> Dosen</div><a href="/dosens/" class="lm">Kelola <i
+            class="bi bi-arrow-right"></i></a>
+      </div>
+      <div id="dashDosen"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const feedItems = [
+    { ic: 'bi-check-lg', bg: 'var(--g100)', c: 'var(--g700)', txt: '<strong>Ahmad Syaifullah</strong> — PKL disetujui', time: '08 Mar · 10:32' },
+    { ic: 'bi-clock', bg: '#fef3c7', c: '#d97706', txt: '<strong>Budi Kurniawan</strong> mengajukan PKL baru', time: '08 Mar · 09:15' },
+    { ic: 'bi-building', bg: 'var(--g100)', c: 'var(--g700)', txt: 'Mitra baru <strong>BKKBN DIY</strong> ditambahkan', time: '07 Mar · 14:20' },
+    { ic: 'bi-x-lg', bg: '#fef2f2', c: 'var(--red)', txt: '<strong>Dewi Wulandari</strong> — PKL ditolak', time: '07 Mar · 11:05' },
+  ];
+
+  const mitraData = [
+    { id: 1, nama: 'Dinas Sosial Sleman', pic: 'Pak Eko', mhs: 3, emo: '🏛️', bg: '#eff6ff', c: 'var(--blue)' },
+    { id: 2, nama: 'BPS Gunungkidul', pic: 'Bu Aini', mhs: 2, emo: '📊', bg: 'var(--g100)', c: 'var(--g700)' },
+    { id: 3, nama: 'BKKBN DIY', pic: 'Pak Iwan', mhs: 4, emo: '👨👩👧', bg: '#fef3c7', c: '#d97706' },
+  ];
+
+  const dosenData = [
+    { id: 1, nama: 'Dr. Siti Rahayu, M.Si.', init: 'SR', color: 'linear-gradient(135deg,#16a34a,#22c55e)', jur: 'Sosiologi', mhs: 8 },
+    { id: 2, nama: 'Prof. Harianto W., Ph.D.', init: 'HW', color: 'linear-gradient(135deg,#7c3aed,#a78bfa)', jur: 'Sosiologi', mhs: 6 },
+    { id: 3, nama: 'Dr. Nugroho Wicaksono', init: 'NW', color: 'linear-gradient(135deg,#2563eb,#38bdf8)', jur: 'Antropologi', mhs: 5 },
+  ];
+
+  function renderFeed() { document.getElementById('dashFeed').innerHTML = feedItems.map(f => `<div class="fi"><div class="f-ic" style="background:${f.bg};color:${f.c};"><i class="bi ${f.ic}"></i></div><div><div class="f-tx">${f.txt}</div><div class="f-ti">${f.time}</div></div></div>`).join(''); }
+  function renderDashMitra() { document.getElementById('dashMitra').innerHTML = mitraData.map(m => `<div class="mitem"><div class="m-ic" style="background:${m.bg};color:${m.c};">${m.emo}</div><div><div class="m-nm2">${m.nama}</div><div class="m-in">PIC: ${m.pic}</div></div><div class="m-ct"><i class="bi bi-people"></i>${m.mhs}</div></div>`).join(''); }
+  function renderDashDosen() { document.getElementById('dashDosen').innerHTML = dosenData.map(d => `<div class="mitem"><div class="m-av" style="background:${d.color};width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:.77rem;font-weight:700;color:white;flex-shrink:0;">${d.init}</div><div><div class="m-nm2">${d.nama}</div><div class="m-in">${d.jur}</div></div><div class="m-ct"><i class="bi bi-people"></i>${d.mhs}</div></div>`).join(''); }
+
+  renderFeed();
+  renderDashMitra();
+  renderDashDosen();
+</script>
 {% endblock %}

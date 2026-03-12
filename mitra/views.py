@@ -35,6 +35,7 @@ def index_staf(req):
     return render(req, 'mitras/index.html', {
         'data': tasks,
         'form': form_input,
+        'active_page': 'mitra'
     })
 
 

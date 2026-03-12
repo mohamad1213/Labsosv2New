@@ -10,6 +10,7 @@ urlpatterns = [
     path('new/', views.new),
     path('<id>/', views.detail_dosen),
     path('<id>/delete/', views.delete),
+    path('<id>/evaluate/', views.evaluate_logbook),
 ]
 
 # if settings.DEBUG:

@@ -7,6 +7,7 @@ from dosen.models import Dosen
 class Pkl(models.Model):
     owner = models.ForeignKey(User, on_delete = models.DO_NOTHING,related_name='mahasiswa')
     judul = models.CharField(max_length=255)
+    proposal = models.FileField(upload_to='proposals/', blank=True, null=True)
     nama_mitra = models.ForeignKey(Forum, on_delete = models.DO_NOTHING)
     nama_dosen = models.ForeignKey("auth.User", limit_choices_to={'groups__name': "dosen"}, on_delete = models.DO_NOTHING, related_name='membimbing')
     tanggal_mulai = models.DateField(default=datetime.now)

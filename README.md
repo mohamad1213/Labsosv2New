@@ -1,7 +1,7 @@
 # 🎓 SIM LABSOS (Sistem Informasi Manajemen Laboratorium Sosial)
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-2.2+-092E20?style=for-the-badge&logo=django&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.+-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 **SIM LABSOS** adalah aplikasi berbasis web yang dirancang khusus untuk mahasiswa Universitas Nahdlatul Ulama Yogyakarta. Aplikasi ini memiliki fungsi utama sebagai **Sistem Informasi Manajemen Praktik Kerja Lapangan (SIM PKL)** serta berfokus dalam menangani seluruh proses administrasi terkait Laboratorium Sosiologi.
@@ -121,6 +121,49 @@ Akses secara lokal aplikasi melalui peramban (Web Browser) di alamat server:
 **💼 Staff / Administrasi**
 - Username / Akun: `staf`
 - Password / Sandi: `praxis123`
+
+---
+
+## 📸 Screenshot Aplikasi
+
+Berikut adalah beberapa tampilan dari aplikasi SIM LABSOS:
+
+![Halaman Login](media/screenshots/login.png)
+*Gambar 1: Halaman Login*
+
+![Dashboard Mahasiswa](media/screenshots/dashboard_mahasiswa.png)
+*Gambar 2: Dashboard Mahasiswa*
+
+![Halaman Forum Diskusi](media/screenshots/forum_diskusi.png)
+*Gambar 3: Halaman Forum Diskusi*
+
+---
+
+## 📝 Keterangan Fitur
+
+Berikut adalah fitur-fitur utama yang tersedia di aplikasi SIM LABSOS:
+
+1. **Manajemen Akun**
+   - Registrasi dan autentikasi pengguna.
+   - Reset password melalui email.
+
+2. **Logbook PKL**
+   - Mahasiswa dapat mencatat kegiatan harian selama PKL.
+   - Dosen dapat memberikan evaluasi dan catatan pada logbook.
+
+3. **Forum Diskusi**
+   - Fasilitas diskusi antara mahasiswa, dosen, dan staf.
+   - Mendukung unggahan file dan komentar.
+
+4. **Manajemen Catatan**
+   - Dosen dan staf dapat membuat catatan penting terkait kegiatan mahasiswa.
+
+5. **Dashboard Interaktif**
+   - Statistik dan ringkasan kegiatan mahasiswa.
+   - Notifikasi untuk tugas atau catatan baru.
+
+6. **Manajemen Mitra**
+   - Informasi dan pengelolaan mitra tempat mahasiswa melakukan PKL.
 
 ---
 

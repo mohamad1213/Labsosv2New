@@ -1,107 +1,135 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "base_mahasiswa.html" %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Forum {{ data.nama_mitra }}{% endblock %}
+{% block topbar_title %}Forum {{ data.nama_mitra }}{% endblock %}
 
 {% block content %}
-    <div class="col-md-12 stretch-card grid-margin">
-        <div class="card bg-gradient-primary card-img-holder text-white">
-            <div class="card-body">
-                <img src="{% static 'css/assets/images/dashboard/circle.svg' %}" class="card-img-absolute"
-                    alt="circle-image" />
-                <h2 class="mt-4" style="text-align: center;">Forum {{data.nama_mitra}}</h2>
-            </div>
-        </div>
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;">
+    <a class="btn-gray" href="/forum/"><i class="bi bi-arrow-left"></i> Kembali</a>
+    <div style="flex:1;">
+        <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.1rem;font-weight:900;">
+            Forum — {{data.nama_mitra }}</div>
+        <div style="font-size:.76rem;color:var(--gray400);margin-top:2px;">{{ data.alamat }}</div>
     </div>
-    <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-        <h3>Upload File Mingguan !!</h3>
-        <hr>
-        {% load crispy_forms_tags %}
-        {% csrf_token %}
-        {{ form|crispy }}
-        {{ form_gambar }}
-        <button type="submit" class="btn btn-warning mb-3 rounded-pill"
-            style="background-color:rgb(255, 214, 0); color: black;">
-            <span><span>&#43;</span><b> BUAT POSTINGAN </b></span>
-        </button>
-    </form>
-    <div class="row">
-        <div class="col-12">
-            {% for d in data.posting.all %}
-            <div class="card" style="box-shadow:0 0 black;">
-                <div class="card-body">
-                    <!-- This is some text within a card body. -->
-                    <div class="media-body">
-                        <div style="text-align: right;">
-                            <a href="#delete-{{d.id}}" data-toggle="modal" data-target="#delete-{{d.id}}">Hapus</a>
-                        </div>
-                        <h5>{{d.owner}} <small><i>Posted on {{d.waktu}}</i></small></h5>
-                        <hr>
-                        <p>{{d.desc}}</p>
-                        <p>
-                            <a href="{{d}}"><i class="fas fa-cloud-download-alt fa-3x"></i></a><small>download
-                                file</small>
-                        </p>
-                        <form action="/forum/{{data.id}}/posting/{{d.id}}/komen" method="post" class="mt-3"
-                            enctype="multipart/form-data">
-                            {% load crispy_forms_tags %}
-                            {% csrf_token %}
-                            {{ form_komen|crispy }}
-                            <button class="btn btn-primary">Sent</button>
-                            <!-- {{ form_gambar|crispy }} -->
-                        </form>
-                        <br>
-                        <div style="text-align: left;">
-                            <a href="#komen-{{d.id}}" data-toggle="collapse" data-target="#komen-{{d.id}}" role="button"
-                                aria-expanded="false" aria-controls="komen">show all comment</a>
-                        </div>
+    <button class="btn-g" onclick="openModal('modalPosting')">
+        <i class="bi bi-pencil-square"></i> Buat Posting
+    </button>
+</div>
 
-                        {% for k in d.komentar.all %}
-                        <div class="media p-3">
-                            <div class="collapse multi-collapse" id="komen-{{d.id}}">
-                                <!-- <img src="img_avatar2.png" alt="{{data.owner}}" class="mr-3 mt-3 rounded-circle" style="width:45px;"> -->
-                                <div class="media-body">
-                                    <h5>{{k.pengguna}} <small><i>Posted on {{k.waktu}}</i></small></h5>
-                                    <hr>
-                                    <p>{{k.komentar}}</p>
-                                </div>
-                                <div class="d-flex justify-content-between mt-2 align-items-center">
-                                    <div class="px-4">
-                                        {% if k.pengguna.id == request.user.id %}
-                                        <a href="/forum/{{data.id}}/posting/{{d.id}}/komen/{{k.id}}/delete"
-                                            type="submit">Remove</a>
-                                        {% endif %}
-                                        <a href="#">Reply</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+<!-- Postings -->
+{% if data.posting.all %}
+{% for d in data.posting.all %}
+{% with initial=d.owner.username|slice:":2"|upper %}
+<div class="post-card">
+    <div class="post-header">
+        <div class="post-av" style="background:linear-gradient(135deg,#16a34a,#22c55e);">{{ initial }}</div>
+        <div style="flex:1;">
+            <div class="post-uname">{{ d.owner.userprofile.name|default:d.owner.username }}</div>
+            <div class="post-time">{{ d.waktu|date:"d M Y · H:i" }}</div>
+        </div>
+        {% if d.owner == request.user %}
+        <a href="/forum/{{ data.id }}/posting/{{ d.id }}/delete" class="btn-red"
+            style="padding:5px 10px;font-size:.75rem;" onclick="return confirm('Hapus posting ini?')">
+            <i class="bi bi-trash3"></i>
+        </a>
+        {% endif %}
+    </div>
+    <div class="post-text">{{ d.desc }}</div>
+    {% if d.upload_img %}
+    <img src="{{ d.upload_img_url }}" alt="gambar posting" class="post-img">
+    {% endif %}
+    <!-- Tombol toggle komentar -->
+    <div {% if d.komentar.all %}style="display:flex;gap:8px;margin-bottom:10px;" {% else
+        %}style="display:flex;gap:8px;margin-bottom:0;" {% endif %}>
+        <button class="post-action-btn" onclick="toggleKomen('komen-{{ d.id }}')">
+            <i class="bi bi-chat"></i> {{ d.komentar.count }} Komentar
+        </button>
+    </div>
+    <!-- Komentar -->
+    <div class="comment-wrap" id="komen-{{ d.id }}" {% if d.komentar.all %}style="display:block;" {% else
+        %}style="display:none;" {% endif %}>
+        {% for k in d.komentar.all %}
+        {% with ki=k.pengguna.username|slice:":2"|upper %}
+        <div class="comment-item">
+            <div class="cmt-av" style="background:linear-gradient(135deg,#475569,#94a3b8);">{{ ki }}</div>
+            <div class="cmt-bubble">
+                <div class="cmt-name">{{ k.pengguna.userprofile.name|default:k.pengguna.username }}</div>
+                <div class="cmt-text">{{ k.komentar }}</div>
             </div>
-            <!-- Modal Delete -->
-            <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body" style="text-align: center;">
-                            <div class="modal-body">
-                                <h5> Do You want to delete this post ?</h5>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                                No
-                            </button>
-                            <a href="/forum/{{data.id}}/posting/{{d.id}}/delete" type="submit"
-                                class="btn btn-danger">Yes</a>
-                        </div>
-                    </div>
+            {% if k.pengguna == request.user %}
+            <a href="/forum/{{ data.id }}/posting/{{ d.id }}/komen/{{ k.id }}/delete"
+                style="font-size:.72rem;color:var(--red);text-decoration:none;align-self:center;flex-shrink:0;margin-left:6px;"
+                onclick="return confirm('Hapus komentar?')">
+                <i class="bi bi-x-circle"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endwith %}
+        {% endfor %}
+        <!-- Form kirim komentar -->
+        <form action="/forum/{{ data.id }}/posting/{{ d.id }}/komen" method="POST"
+            style="display:flex;gap:8px;margin-top:10px;">
+            {% csrf_token %}
+            <input type="text" name="komentar" class="fi" placeholder="Tulis komentar..." required
+                style="padding:8px 12px;">
+            <button type="submit"
+                style="background:var(--g500);color:white;border:none;border-radius:8px;padding:0 14px;cursor:pointer;font-size:.9rem;">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </form>
+    </div>
+</div>
+{% endwith %}
+{% endfor %}
+{% else %}
+<div class="card-box">
+    <div class="empty-st">
+        <i class="bi bi-chat-square-dots"></i>
+        <p>Belum ada posting di forum ini. Jadilah yang pertama berdiskusi!</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block modals %}
+<!-- Modal Buat Posting -->
+<div class="modal-overlay" id="modalPosting">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div class="modal-title"><i class="bi bi-pencil-square" style="color:var(--g600);"></i> Buat Posting</div>
+            <button class="modal-close" onclick="closeModal('modalPosting')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="margin-bottom:14px;">
+                    <label class="fl">Isi Posting</label>
+                    <textarea class="fi" name="desc" rows="5" placeholder="Tulis pertanyaan, informasi, atau diskusi..."
+                        required></textarea>
                 </div>
-            </div>
-            {% endfor %}
+                <div style="margin-bottom:14px;">
+                    <label class="fl">Lampiran Gambar (opsional)</label>
+                    <input class="fi" type="file" name="upload_img" accept="image/*" style="padding:7px 12px;">
+                    <div style="font-size:.7rem;color:var(--gray400);margin-top:4px;">Gambar &gt;300KB akan dikompres
+                        otomatis</div>
+                </div>
+                <div class="modal-foot" style="padding:0;border:none;margin-top:4px;">
+                    <button type="button" class="btn-gray" onclick="closeModal('modalPosting')">Batal</button>
+                    <button type="submit" class="btn-g"><i class="bi bi-send"></i> Kirim</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-</div>
-</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleKomen(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
 {% endblock %}

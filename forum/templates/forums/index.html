@@ -1,184 +1,305 @@
 {% extends "base_staf.html" %}
 {% load static %}
 
+{% block page_title %}SIM LABSOS v2 — Forum Data Mitra{% endblock %}
+{% block topbar_title %}Forum Data Mitra{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_staf.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid" style="padding: 5px;">
-    <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i>Previous</button>
-    <h4 class="mt-4" style="text-align: center;">FORUM</h4>
-    <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal" data-target="#input"
-        style="background-color:rgb(255, 214, 0); color: black;">
-        <span><span>&#43;</span><b> I N P U T </b></span>
+<div class="pg-header">
+    <div>
+        <div class="pg-title">Forum - Data Mitra</div>
+        <div class="pg-sub">Manajemen instansi/lembaga tempat PKL mahasiswa</div>
+    </div>
+    <button class="btn-g" onclick="document.getElementById('modalAddMitra').classList.add('open')">
+        <i class="bi bi-plus-lg"></i> Tambah Mitra
     </button>
-    <div class="table-responsive">
-        <table class="table table-hover" id="" width="100%" cellspacing="0">
-            <thead>
-                <tr style="background-color: #625f53; color: aliceblue;">
-                    <th>No</th>
-                    <th>Nama Mitra</th>
-                    <th>PIC</th>
-                    <!-- <th>Alamat/th> -->
-                    <th>Kontak</th>
-                    <!-- <th>Deskripsi</th> -->
-                    <th>Action</th>
-                </tr>
-            </thead>
-            {% for d in data %}
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{d.nama_mitra}}</td>
-                <td>{{d.pic}}</td>
-                <!-- <td>{{d.alamat}}</td> -->
-                <td>{{d.telp}}</td>
-                <!-- <td>{{d.deskripsi}}</td> -->
-                <td>
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#detail-{{d.id}}"
-                        style="background-color:rgb(255, 214, 0);">
-                        <i class="fas fa-eye"></i></button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-{{d.id}}">
-                        <i class="fas fa-pen"></i></button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-{{d.id}}">
-                        <i class="fas fa-trash-alt"></i></i></button>
-                </td>
-            </tr>
+</div>
 
-            <!-- Modal Delete -->
-            <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="modal-body">
-                                <p> Do You want To delete
-                                    <strong>{{d.nama_mitra}}</strong>?</p>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                                No
-                            </button>
-                            <a href="/forums/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                        </div>
-                    </div>
+<!-- FILTER BAR -->
+<div class="filter-bar">
+    <div class="search-wrap">
+        <i class="bi bi-search" style="color:var(--gray400);font-size:.85rem;flex-shrink:0;"></i>
+        <input type="text" id="searchInput" placeholder="Cari nama mitra atau PIC..." oninput="applyFilters()">
+    </div>
+    <div class="filter-chips">
+        <span class="fchip active all">Semua <span class="count-badge" id="bdgAll">{{ data|length }}</span></span>
+    </div>
+</div>
+
+<div class="pkl-grid" id="mitraGrid">
+    {% for d in data %}
+    <div class="pkl-card mitra-item" data-name="{{ d.nama_mitra|lower }} {{ d.pic|lower }}">
+        <div class="card-body">
+            <div class="card-mhs">
+                <div class="card-av"
+                    style="background: linear-gradient(135deg, var(--g600), var(--g400)); font-size: 1.1rem; color: white;">
+                    {{ d.nama_mitra|slice:":2"|upper }}
+                </div>
+                <div style="flex:1;min-width:0;">
+                    <div class="card-mhs-name">{{ d.nama_mitra }}</div>
+                    <div class="card-mhs-nim"
+                        style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;"
+                        title="{{ d.alamat }}">{{ d.alamat }}</div>
                 </div>
             </div>
 
-            <!-- Modal update -->
-            <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="update">Edit Data</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/forums/{{d.id}}/update/" method="POST" class="mt-3">
-                                {% csrf_token %}
-
-                                <div class="form-group">
-                                    <label for="">Nama Mitra</label>
-                                    <input type="text" name="nama_mitra" value="{{d.nama_mitra}}"
-                                        class="form-control mt-2">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">PIC</label>
-                                    <input type="text" name="pic" value="{{d.pic}}" class="form-control mt-2">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Alamat Lengkap</label>
-                                    <input type="text" name="alamat" value="{{d.alamat}}" class="form-control mt-2">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Kontak</label>
-                                    <input type="text" name="telp" value="{{d.telp}}" class="form-control mt-2">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Deskripsi</label>
-                                    <input type="text" name="deskripsi" value="{{d.deskripsi}}"
-                                        class="form-control mt-2">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            <div class="card-detail">
+                <div class="card-row">
+                    <span class="card-row-label">PIC</span>
+                    <span class="card-row-val"><i class="bi bi-person-fill" style="color:var(--gray400);"></i> 
+                        {{ d.pic|default:"-" }}</span>
                 </div>
-            </div>
-
-                <!-- Modal Detail-->
-                <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="detail">Detail Data</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="">
-                                    Nama Mitrra : {{d.nama_mitra}}
-                                </div>
-                                <div class="">
-                                    PIC : {{d.pic}}
-                                </div>
-                                <div class="">
-                                    Alamat : {{d.alamat}}
-                                </div>
-                                <div class="">
-                                    Kontak : {{d.telp}}
-                                </div>
-                                <div class="">
-                                    Deskripsi : {{d.deskripsi}}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-        </table>
-
-
-        <!-- Modal input -->
-        <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="input">Input Data PKL</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                            {% load crispy_forms_tags %}
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Input</button>
-                            </div>
-                        </form>
-                    </div>
+                <div class="card-row">
+                    <span class="card-row-label">Telepon</span>
+                    <span class="card-row-val"><i class="bi bi-telephone" style="color:var(--gray400);"></i> 
+                        {{ d.telp|default:"-" }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-row-label">Deskripsi</span>
+                    <span class="card-row-val"
+                        style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;"
+                        title="{{ d.deskripsi }}">
+                        {{ d.deskripsi|default:"-" }}
+                    </span>
                 </div>
             </div>
         </div>
+
+        <!-- Card Footer Actions -->
+        <div class="card-foot">
+            <div class="card-foot-left">
+                <button type="button" class="btn-gray"
+                    onclick="document.getElementById('update-{{d.id}}').classList.add('open')">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button type="button" class="btn-red"
+                    onclick="document.getElementById('delete-{{d.id}}').classList.add('open')">
+                    <i class="bi bi-trash3"></i> Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Update -->
+    <div class="modal-overlay" id="update-{{d.id}}">
+        <div class="modal-box">
+            <div class="modal-head">
+                <div class="modal-title"><i class="bi bi-pencil" style="color:var(--g600);"></i> Edit Mitra</div>
+                <button type="button" class="modal-close"
+                    onclick="document.getElementById('update-{{d.id}}').classList.remove('open')">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <form action="/forums/{{d.id}}/update/" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                        <div>
+                            <label
+                                style="display:block;font-size:.78rem;font-weight:700;color:var(--gray600);margin-bottom:7px;">Nama
+                                Mitra</label>
+                            <input type="text" name="nama_mitra" value="{{d.nama_mitra}}"
+                                style="width:100%;padding:11px 14px;border:1.5px solid var(--gray200);border-radius:10px;font-size:.85rem;color:var(--gray800);outline:none;background:var(--white);"
+                                required>
+                        </div>
+                        <div>
+                            <label
+                                style="display:block;font-size:.78rem;font-weight:700;color:var(--gray600);margin-bottom:7px;">PIC</label>
+                            <input type="text" name="pic" value="{{d.pic}}"
+                                style="width:100%;padding:11px 14px;border:1.5px solid var(--gray200);border-radius:10px;font-size:.85rem;color:var(--gray800);outline:none;background:var(--white);"
+                                required>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <label
+                            style="display:block;font-size:.78rem;font-weight:700;color:var(--gray600);margin-bottom:7px;">Alamat</label>
+                        <input type="text" name="alamat" value="{{d.alamat}}"
+                            style="width:100%;padding:11px 14px;border:1.5px solid var(--gray200);border-radius:10px;font-size:.85rem;color:var(--gray800);outline:none;background:var(--white);"
+                            required>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                        <div>
+                            <label
+                                style="display:block;font-size:.78rem;font-weight:700;color:var(--gray600);margin-bottom:7px;">No.
+                                Telepon</label>
+                            <input type="text" name="telp" value="{{d.telp}}"
+                                style="width:100%;padding:11px 14px;border:1.5px solid var(--gray200);border-radius:10px;font-size:.85rem;color:var(--gray800);outline:none;background:var(--white);"
+                                required>
+                        </div>
+                        <div>
+                            <label
+                                style="display:block;font-size:.78rem;font-weight:700;color:var(--gray600);margin-bottom:7px;">Deskripsi</label>
+                            <input type="text" name="deskripsi" value="{{d.deskripsi}}"
+                                style="width:100%;padding:11px 14px;border:1.5px solid var(--gray200);border-radius:10px;font-size:.85rem;color:var(--gray800);outline:none;background:var(--white);">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-foot">
+                    <button type="button" class="btn-gray"
+                        onclick="document.getElementById('update-{{d.id}}').classList.remove('open')">Batal</button>
+                    <button type="submit" class="btn-g"><i class="bi bi-save"></i> Simpan Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Delete -->
+    <div class="modal-overlay" id="delete-{{d.id}}">
+        <div class="modal-box sm">
+            <div class="modal-head">
+                <div class="modal-title" style="color:var(--red);">
+                    <div
+                        style="width:30px;height:30px;border-radius:8px;background:#fef2f2;display:grid;place-items:center;flex-shrink:0;">
+                        <i class="bi bi-trash3-fill" style="font-size:.9rem;"></i>
+                    </div>
+                    Hapus Mitra
+                </div>
+                <button type="button" class="modal-close"
+                    onclick="document.getElementById('delete-{{d.id}}').classList.remove('open')">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center;padding:30px 20px;">
+                <div
+                    style="width:68px;height:68px;background:#fef2f2;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;">
+                    <i class="bi bi-exclamation-triangle-fill" style="font-size:1.9rem;color:var(--red);"></i>
+                </div>
+                <div
+                    style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.05rem;font-weight:800;color:var(--gray800);margin-bottom:8px;">
+                    Hapus Data Mitra?
+                </div>
+                <div style="font-size:.85rem;color:var(--gray500);line-height:1.6;">
+                    Data mitra <strong style="color:var(--gray800);">{{ d.nama_mitra }}</strong> akan dihapus permanen
+                    dan tidak bisa dikembalikan.
+                </div>
+            </div>
+            <div class="modal-foot" style="justify-content:center;">
+                <button type="button" class="btn-gray" style="padding:9px 20px;"
+                    onclick="document.getElementById('delete-{{d.id}}').classList.remove('open')">Batal</button>
+                <form action="/forums/{{d.id}}/delete/" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <!-- Since original HTML used anchor <a href="/forums/{{d.id}}/delete"> we should keep it anchor if there's no CSRF required, but let's stick to anchor to match existing functionality exactly -->
+                </form>
+                <a href="/forums/{{d.id}}/delete" class="btn-red" style="padding:9px 20px;">
+                    <i class="bi bi-trash3"></i> Ya, Hapus
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <!-- EMPTY STATE -->
+    <div class="empty-state">
+        <div class="empty-ic">
+            <i class="bi bi-building-x" style="font-size:2rem;color:var(--gray400);"></i>
+        </div>
+        <div
+            style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.15rem;font-weight:900;color:var(--gray700);margin-bottom:6px;">
+            Belum Ada Data Mitra
+        </div>
+        <div style="font-size:.85rem;color:var(--gray400);max-width:280px;margin:0 auto;line-height:1.6;">
+            Saat ini belum ada instansi/lembaga yang terdaftar di sistem.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- NO RESULTS -->
+<div id="noResults" style="display:none;padding:50px 20px;text-align:center;">
+    <div style="font-size:2rem;color:var(--gray300);margin-bottom:12px;"><i class="bi bi-search"></i></div>
+    <div
+        style="font-family:'Cabinet Grotesk',sans-serif;font-size:1rem;font-weight:800;color:var(--gray600);margin-bottom:5px;">
+        Tidak Ditemukan
+    </div>
+    <div style="font-size:.83rem;color:var(--gray400);">Coba kata kunci lain</div>
+</div>
+
+<!-- Modal Tambah Mitra -->
+<div class="modal-overlay" id="modalAddMitra">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div class="modal-title"><i class="bi bi-building" style="color:var(--g600);"></i> Tambah Mitra Baru</div>
+            <button type="button" class="modal-close"
+                onclick="document.getElementById('modalAddMitra').classList.remove('open')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% load crispy_forms_tags %}
+            {% csrf_token %}
+            <div class="modal-body">
+                <style>
+                    #modalAddMitra input,
+                    #modalAddMitra select,
+                    #modalAddMitra textarea {
+                        width: 100%;
+                        padding: 11px 14px;
+                        border: 1.5px solid var(--gray200);
+                        border-radius: 10px;
+                        font-size: .85rem;
+                        color: var(--gray800);
+                        outline: none;
+                        background: var(--white);
+                        margin-bottom: 7px;
+                        font-family: inherit;
+                    }
+
+                    #modalAddMitra input:focus,
+                    #modalAddMitra textarea:focus,
+                    #modalAddMitra select:focus {
+                        border-color: var(--g500);
+                        box-shadow: 0 0 0 4px rgba(34, 197, 94, .1);
+                    }
+
+                    #modalAddMitra label {
+                        display: block;
+                        font-size: .78rem;
+                        font-weight: 700;
+                        color: var(--gray600);
+                        margin-bottom: 5px;
+                    }
+                </style>
+                {{ form }}
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn-gray"
+                    onclick="document.getElementById('modalAddMitra').classList.remove('open')">Batal</button>
+                <button type="submit" class="btn-g"><i class="bi bi-save"></i> Simpan Mitra</button>
+            </div>
+        </form>
     </div>
 </div>
-</div>
-</div>
+
+<script>
+    (function () {
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.mitra-item');
+        const noResults = document.getElementById('noResults');
+
+        window.applyFilters = function () {
+            const q = (searchInput.value || '').toLowerCase().trim();
+            let visible = 0;
+            cards.forEach(card => {
+                const show = !q || card.dataset.name.includes(q);
+                card.classList.toggle('hidden', !show);
+                if (show) visible++;
+            });
+            noResults.style.display = (visible === 0 && cards.length > 0) ? 'block' : 'none';
+        };
+
+        // Close modal logic
+        document.querySelectorAll('.modal-overlay').forEach(o => {
+            o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.open').forEach(o => o.classList.remove('open'));
+            }
+        });
+    })();
+</script>
 {% endblock %}

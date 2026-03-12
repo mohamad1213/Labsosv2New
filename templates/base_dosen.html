@@ -1,277 +1,1114 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>SIM-Labsos v1</title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="{% static 'css/assets/vendors/mdi/css/materialdesignicons.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/assets/vendors/css/vendor.bundle.base.css' %}">
-  <link rel="stylesheet" href="{% static 'css/assets/css/style.css' %}">
-  <!-- End layout styles -->
-  <link rel="shortcut icon" href="{% static 'css/assets/images/favicon.ico'%}" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block page_title %}SIM LABSOS v2 — Dosen{% endblock %}</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --g900: #14532d;
+      --g800: #166534;
+      --g700: #15803d;
+      --g600: #16a34a;
+      --g500: #22c55e;
+      --g400: #4ade80;
+      --g300: #86efac;
+      --g200: #bbf7d0;
+      --g100: #dcfce7;
+      --g50: #f0fdf4;
+      --white: #fff;
+      --gray50: #f8fafc;
+      --gray100: #f1f5f9;
+      --gray200: #e2e8f0;
+      --gray300: #cbd5e1;
+      --gray400: #94a3b8;
+      --gray500: #64748b;
+      --gray600: #475569;
+      --gray700: #334155;
+      --gray800: #1e293b;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --sw: 265px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--gray50);
+      color: var(--gray800);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sw);
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--gray200);
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      box-shadow: 4px 0 20px rgba(22, 163, 74, .06);
+    }
+
+    .sb-brand {
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid var(--gray100);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .sb-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--g700), var(--g500));
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, .25);
+      flex-shrink: 0;
+    }
+
+    .sb-bn {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 900;
+      font-size: .95rem;
+      color: var(--gray800);
+    }
+
+    .sb-bs {
+      font-size: .58rem;
+      color: var(--gray400);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+    }
+
+    .sb-user {
+      margin: 12px 12px 4px;
+      background: var(--g50);
+      border: 1.5px solid var(--g200);
+      border-radius: 12px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .av {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--g700), var(--g400));
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: .8rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .sb-un {
+      font-weight: 700;
+      font-size: .82rem;
+      color: var(--gray800);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sb-role {
+      display: inline-block;
+      margin-top: 2px;
+      font-size: .61rem;
+      font-weight: 700;
+      background: var(--g100);
+      color: var(--g800);
+      padding: 1px 7px;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+
+    .sb-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 9px;
+    }
+
+    .sb-sec {
+      font-size: .6rem;
+      font-weight: 700;
+      color: var(--gray400);
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      padding: 12px 9px 4px;
+    }
+
+    .sb-a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      border-radius: 9px;
+      color: var(--gray500);
+      text-decoration: none;
+      font-size: .84rem;
+      font-weight: 500;
+      transition: all .15s;
+      margin-bottom: 1px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .sb-a:hover {
+      background: var(--g50);
+      color: var(--g800);
+    }
+
+    .sb-a.act {
+      background: var(--g100);
+      color: var(--g800);
+      font-weight: 700;
+    }
+
+    .sb-a.act i {
+      color: var(--g600);
+    }
+
+    .sb-a i {
+      font-size: .95rem;
+      width: 18px;
+      text-align: center;
+    }
+
+    .sb-bdg {
+      margin-left: auto;
+      background: var(--g500);
+      color: white;
+      font-size: .61rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 99px;
+    }
+
+    .sb-bdg.w {
+      background: var(--amber);
+    }
+
+    .sb-foot {
+      padding: 12px 14px;
+      border-top: 1px solid var(--gray100);
+    }
+
+    .sb-out {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 11px;
+      border-radius: 9px;
+      color: var(--red);
+      text-decoration: none;
+      font-size: .83rem;
+      font-weight: 600;
+      transition: all .15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+    }
+
+    .sb-out:hover {
+      background: #fef2f2;
+    }
+
+    .main {
+      margin-left: var(--sw);
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 60px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray200);
+      padding: 0 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .04);
+    }
+
+    .tb-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tb-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--gray800);
+    }
+
+    .tb-sub {
+      font-size: .72rem;
+      color: var(--gray400);
+    }
+
+    .tb-r {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ib {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: var(--gray50);
+      border: 1px solid var(--gray200);
+      color: var(--gray500);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: .95rem;
+      transition: all .15s;
+      position: relative;
+    }
+
+    .ib:hover {
+      background: var(--g50);
+      border-color: var(--g300);
+      color: var(--g700);
+    }
+
+    .ndot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .ndot.a {
+      background: var(--amber);
+    }
+
+    .page {
+      padding: 24px;
+    }
+
+    .page-section {
+      display: block;
+    }
+
+    /* STATS */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    .sc {
+      background: var(--white);
+      border: 1px solid var(--gray200);
+      border-radius: 15px;
+      padding: 18px;
+      transition: all .18s;
+    }
+
+    .sc:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(22, 163, 74, .09);
+      border-color: var(--g300);
+    }
+
+    .sc-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .sc-ic {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+    }
+
+    .sc-ic.g {
+      background: var(--g100);
+      color: var(--g700);
+    }
+
+    .sc-ic.a {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .sc-ic.b {
+      background: #eff6ff;
+      color: var(--blue);
+    }
+
+    .sc-tr {
+      font-size: .68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .tg {
+      background: var(--g100);
+      color: var(--g700);
+    }
+
+    .ta {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .sc-val {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gray800);
+      line-height: 1;
+      letter-spacing: -.5px;
+      margin-bottom: 3px;
+    }
+
+    .sc-lbl {
+      font-size: .75rem;
+      color: var(--gray400);
+      font-weight: 600;
+    }
+
+    /* ALERT STRIP */
+    .alert-strip {
+      background: linear-gradient(90deg, #fffbeb, #fef9ec);
+      border: 1.5px solid #fde68a;
+      border-radius: 14px;
+      padding: 13px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, .07);
+    }
+
+    .al-ic {
+      width: 38px;
+      height: 38px;
+      background: #fef3c7;
+      color: #d97706;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .al-t {
+      font-weight: 700;
+      font-size: .87rem;
+      color: #92400e;
+    }
+
+    .al-s {
+      font-size: .76rem;
+      color: #b45309;
+      margin-top: 2px;
+    }
+
+    .al-btn {
+      margin-left: auto;
+      text-decoration: none;
+      background: #d97706;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+
+    .al-btn:hover {
+      background: #b45309;
+      color: white;
+    }
+
+    /* CARD / BOX */
+    .card-box {
+      background: var(--white);
+      border: 1px solid var(--gray200);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .cb-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--gray100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, var(--g50), white);
+    }
+
+    .cb-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: .93rem;
+      font-weight: 800;
+      color: var(--gray800);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cb-title i {
+      color: var(--g600);
+    }
+
+    /* TABLE */
+    .tbl {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .tbl thead th {
+      background: var(--gray50);
+      padding: 10px 16px;
+      font-size: .67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gray400);
+      border-bottom: 1px solid var(--gray200);
+    }
+
+    .tbl tbody td {
+      padding: 13px 16px;
+      font-size: .83rem;
+      border-bottom: 1px solid var(--gray100);
+      color: var(--gray600);
+      vertical-align: middle;
+    }
+
+    .tbl tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tbl tbody tr:hover td {
+      background: var(--g50);
+    }
+
+    /* CHIPS */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: .71rem;
+      font-weight: 700;
+    }
+
+    .chip.ok {
+      background: var(--g100);
+      color: var(--g800);
+      border: 1px solid var(--g200);
+    }
+
+    .chip.pend {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .chip.rej {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .chip.info {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* BUTTONS */
+    .btn-g {
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--g700), var(--g500));
+      color: white;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 9px;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all .2s;
+    }
+
+    .btn-g:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(22, 163, 74, .25);
+      color: white;
+    }
+
+    .btn-red {
+      text-decoration: none;
+      background: #fef2f2;
+      color: var(--red);
+      border: 1.5px solid #fecaca;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-red:hover {
+      background: #fee2e2;
+    }
+
+    .btn-gray {
+      text-decoration: none;
+      background: var(--gray50);
+      color: var(--gray600);
+      border: 1px solid var(--gray200);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: .8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-gray:hover {
+      background: var(--gray100);
+    }
+
+    .lm {
+      font-size: .76rem;
+      font-weight: 600;
+      color: var(--g600);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap .15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .lm:hover {
+      gap: 8px;
+      color: var(--g800);
+    }
+
+    /* TWO COL */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 16px;
+    }
+
+    /* LOGBOOK ITEMS */
+    .li {
+      text-decoration: none;
+      display: flex;
+      gap: 11px;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--gray100);
+      cursor: pointer;
+      transition: background .15s;
+      color: inherit;
+    }
+
+    .li:hover {
+      background: var(--g50);
+    }
+
+    .li:last-child {
+      border-bottom: none;
+    }
+
+    .l-av {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .l-t {
+      font-weight: 700;
+      font-size: .84rem;
+      color: var(--gray700);
+      margin-bottom: 3px;
+    }
+
+    .l-m {
+      font-size: .72rem;
+      color: var(--gray400);
+    }
+
+    .l-d {
+      margin-left: auto;
+      align-self: center;
+      background: var(--g100);
+      color: var(--g800);
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: .71rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* MHS ROW */
+    .mrow {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--gray100);
+      text-decoration: none;
+      color: inherit;
+      transition: background .15s;
+      cursor: pointer;
+      border-left: none;
+      border-right: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .mrow:last-child {
+      border-bottom: none;
+    }
+
+    .mrow:hover {
+      background: var(--g50);
+    }
+
+    .m-av {
+      width: 35px;
+      height: 35px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: .8rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .m-nm {
+      font-weight: 700;
+      font-size: .84rem;
+      color: var(--gray700);
+    }
+
+    .m-mi {
+      font-size: .72rem;
+      color: var(--gray400);
+      margin-top: 1px;
+    }
+
+    .m-s {
+      margin-left: auto;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+      flex-shrink: 0;
+    }
+
+    .s-ok {
+      background: var(--g100);
+      color: var(--g800);
+      border: 1px solid var(--g200);
+    }
+
+    .s-rv {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    /* DETAIL MAHASISWA */
+    .mhs-detail-card {
+      background: var(--white);
+      border: 1px solid var(--gray200);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .mhs-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray100);
+    }
+
+    .mhs-big-av {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: white;
+    }
+
+    /* FORUM MONITOR */
+    .forum-item {
+      display: flex;
+      gap: 11px;
+      align-items: center;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--gray100);
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .forum-item:last-child {
+      border-bottom: none;
+    }
+
+    .forum-item:hover {
+      background: var(--g50);
+    }
+
+    .f-av {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: .82rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .5);
+      z-index: 999;
+      display: none;
+      place-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      display: grid;
+    }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 86vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+      animation: mIn .2s ease;
+    }
+
+    @keyframes mIn {
+      from {
+        transform: scale(.96);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .modal-head {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--gray100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 1;
+    }
+
+    .modal-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: .98rem;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: none;
+      background: var(--gray100);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: .95rem;
+      color: var(--gray500);
+    }
+
+    .modal-close:hover {
+      background: var(--gray200);
+    }
+
+    .modal-body {
+      padding: 18px 22px;
+    }
+
+    .modal-foot {
+      padding: 13px 22px;
+      border-top: 1px solid var(--gray100);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    label.fl {
+      display: block;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--gray600);
+      margin-bottom: 4px;
+    }
+
+    .fi {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid var(--gray200);
+      border-radius: 9px;
+      font-size: .83rem;
+      color: var(--gray800);
+      outline: none;
+      transition: border .15s;
+      font-family: inherit;
+      background: white;
+    }
+
+    .fi:focus {
+      border-color: var(--g500);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, .1);
+    }
+
+    textarea.fi {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* TOAST */
+    .toast-wrap {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: var(--gray800);
+      color: white;
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-size: .82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+      animation: sU .25s ease;
+      min-width: 230px;
+    }
+
+    .toast.g {
+      background: var(--g700);
+    }
+
+    .toast.r {
+      background: #dc2626;
+    }
+
+    @keyframes sU {
+      from {
+        transform: translateY(20px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray200);
+      border-radius: 99px;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-dark">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="/">SIM-Labsos</a>
-        <!-- <a class="navbar-brand brand-logo" href="/">SIM-Labsos<img src="{% static 'css/assets/images/1.svg' %}" alt="logo" /></a> -->
-        <a class="navbar-brand brand-logo-mini" href="/" style="width: 90%; height: 50px; margin: 10px;">LABSOS</a>
-        <!-- <a class="navbar-brand brand-logo-mini" href="/"  style="width: 100%; height: 50px; margin-top: 10px;"><img src="{% static 'css/assets/images/UNU.png' %}" alt="logo" /></a> -->
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-          <span class="mdi mdi-menu"></span>
-        </button>
-        <div class="search-field d-none d-md-block">
-          <form class="d-flex align-items-center h-100" action="#">
-            <div class="input-group">
-              <div class="input-group-prepend bg-transparent">
-                <i class="input-group-text border-0 mdi mdi-magnify"></i>
-              </div>
-              <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
-            </div>
-          </form>
-        </div>
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" id="profileDropdown" href="/" data-toggle="dropdown"
-              aria-expanded="false">
-              <div class="nav-profile-img">
-                <img src="{{user.userprofile.profile_pic.url}}" alt="image">
-                <span class="availability-status online"></span>
-              </div>
-              <div class="nav-profile-text">
-                <p class="mb-1 text-black">{{ user.userprofile.name }}</p>
-              </div>
-            </a>
-            <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="/accounts/profile_dosen">
-                <i class="mdi mdi-cached mr-2 text-success"></i>Profile </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/accounts/logout">
-                <i class="mdi mdi-logout mr-2 text-primary"></i> Signout </a>
-            </div>
-          </li>
-          <li class="nav-item d-none d-lg-block full-screen-link">
-            <a class="nav-link">
-              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-            </a>
-          </li>
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-              data-toggle="dropdown">
-              <i class="mdi mdi-bell-outline"></i>
-              <span class="count-symbol bg-danger"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-              aria-labelledby="notificationDropdown">
-              <h6 class="p-3 mb-0">Notifications</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    <i class="mdi mdi-calendar"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                  <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                    <i class="mdi mdi-settings"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                  <p class="text-gray ellipsis mb-0"> Update dashboard </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-info">
-                    <i class="mdi mdi-link-variant"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                  <p class="text-gray ellipsis mb-0"> New admin wow! </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <h6 class="p-3 mb-0 text-center">See all notifications</h6>
-            </div>
-          </li> -->
-          <!-- <li class="nav-item nav-logout d-none d-lg-block">
-              <a class="nav-link" href="#">
-                <i class="mdi mdi-power"></i>
-              </a>
-            </li>
-            <li class="nav-item nav-settings d-none d-lg-block">
-              <a class="nav-link" href="#">
-                <i class="mdi mdi-format-line-spacing"></i>
-              </a>
-            </li> -->
-        </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-          data-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
-        </button>
-      </div>
-    </nav>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-      <!-- partial:partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item nav-profile">
-            <a href="/" class="nav-link">
-              <div class="nav-profile-image">
-                <img src="{{user.userprofile.profile_pic.url}}" alt="profile">
-                <span class="login-status online"></span>
-                <!--change to offline or busy as needed-->
-              </div>
-              <div class="nav-profile-text d-flex flex-column">
-                <span class="font-weight-bold mb-2">{{ user.userprofile.name }}</span>
-                <!-- <span class="font-weight-bold mb-2">David Grey. H</span> -->
-                <!-- <span class="text-secondary text-small">Project Manager</span> -->
-                <span class="text-secondary text-small">{{ user.username }}</span>
-              </div>
-              <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <span class="menu-title">Dashboard</span>
-              <i class="mdi mdi-home menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/dosenah">
-              <span class="menu-title">Data Peserta Labsos</span>
-              <i class="mdi mdi mdi-account-check menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/catatan.d">
-              <span class="menu-title">Logbook</span>
-              <i class="mdi mdi-book menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/forumd">
-              <span class="menu-title">Forum</span>
-              <i class="mdi mdi-contacts menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span class="menu-title">Tentang</span>
-              <i class="mdi mdi-contacts menu-icon"></i>
-            </a>
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <span class="menu-title">Basic UI Elements</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-crosshairs-gps menu-icon"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link"
-                    href="{% static 'css/pages/ui-features/buttons.html' %}">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link"
-                    href="{% static 'css/pages/ui-features/typography.html' %}">Typography</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% static 'css/pages/forms/basic_elements.html' %}">
-              <span class="menu-title">Forms</span>
-              <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% static 'css/pages/charts/chartjs.html' %}">
-              <span class="menu-title">Charts</span>
-              <i class="mdi mdi-chart-bar menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% static 'css/pages/tables/basic-table.html' %}">
-              <span class="menu-title">Tables</span>
-              <i class="mdi mdi-table-large menu-icon"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
-              aria-controls="general-pages">
-              <span class="menu-title">Sample Pages</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-medical-bag menu-icon"></i>
-            </a>
-            <div class="collapse" id="general-pages">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{% static 'css/pages/samples/blank-page.html' %}"> Blank
-                    Page </a></li>
-                <li class="nav-item"> <a class="nav-link" href="{% static 'css/pages/samples/login.html' %}"> Login </a>
-                </li>
-                <li class="nav-item"> <a class="nav-link" href="{% static 'css/pages/samples/register.html' %}">
-                    Register </a></li>
-                <li class="nav-item"> <a class="nav-link" href="{% static 'css/pages/samples/error-404.html' %}"> 404
-                  </a></li>
-                <li class="nav-item"> <a class="nav-link" href="{% static 'css/pages/samples/error-500.html' %}"> 500
-                  </a></li>
-              </ul>
-            </div>
-          </li> -->
-        </ul>
-      </nav>
-      <!-- partial -->
-      {% include 'messages.html' %}
 
-      <div class="main-panel">
-        <div class="content-wrapper" style="background-color: #F0F2F3;">
-          <!-- <div class="container-scroller">
-          <i class="btn-icon mdi mdi-arrow-left" onclick="history.back();">Kembali</i>
-        </div> -->
-          {% block content %}
-          <!-- # isi konten -->
-          {% endblock %}
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">🏛️</div>
+      <div>
+        <div class="sb-bn">SIM LABSOS</div>
+        <div class="sb-bs">UNUGHA · v2</div>
+      </div>
+    </div>
+    <div class="sb-user">
+      <div class="av">{{ request.user.username|upper|slice:":2" }}</div>
+      <div>
+        <div class="sb-un">{{ request.user.first_name }} {{ request.user.last_name|default:request.user.username }}
+        </div>
+        <div class="sb-role">Dosen</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-sec">Utama</div>
+      <a href="/" class="sb-a {% if active_page == 'dashboard' %}act{% endif %}"><i class="bi bi-grid-fill"></i>
+        Dashboard</a>
+      <a href="/dosenah/" class="sb-a {% if active_page == 'mahasiswa' %}act{% endif %}"><i
+          class="bi bi-people-fill"></i> Mahasiswa Bimbingan</a>
+      <div class="sb-sec">Monitoring</div>
+      <a href="/catatan.d/" class="sb-a {% if active_page == 'logbook' %}act{% endif %}"><i
+          class="bi bi-journal-text"></i> Logbook Mahasiswa</a>
+      <a href="/forumd/" class="sb-a {% if active_page == 'forum' %}act{% endif %}"><i class="bi bi-chat-dots-fill"></i>
+        Forum Diskusi</a>
+      <div class="sb-sec">Akun</div>
+      <a href="/accounts/profile_dosen/" class="sb-a {% if active_page == 'profil' %}act{% endif %}"><i
+          class="bi bi-person-badge-fill"></i> Profil Dosen</a>
+    </nav>
+    <div class="sb-foot"><a href="/accounts/logout" class="sb-out"><i class="bi bi-box-arrow-left"></i> Keluar</a></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-left">
+        <div class="tb-title" id="topbarTitle">{% block topbar_title %}Dashboard Dosen{% endblock %}</div>
+        <div class="tb-sub">{{ request.user.first_name }} {{ request.user.last_name|default:request.user.username }}
         </div>
       </div>
-      <!-- main-panel ends -->
+    </header>
+
+    <div class="page">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert-strip" style="background:linear-gradient(90deg,var(--g50),white);border-color:var(--g200);">
+        <div class="al-ic" style="background:var(--g100);color:var(--g700);"><i class="bi bi-info-circle-fill"></i>
+        </div>
+        <div style="flex:1;">
+          <div class="al-t" style="color:var(--g800);">{{ message }}</div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% block content %}
+      {% endblock %}
     </div>
-    <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
-  <!-- plugins:js -->
-  <script src="{% static 'css/assets/vendors/js/vendor.bundle.base.js' %}"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="{% static 'css/assets/vendors/chart.js' %}/Chart.min.js' %}"></script>
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="{% static 'css/assets/js/off-canvas.js' %}"></script>
-  <script src="{% static 'css/assets/js/hoverable-collapse.js' %}"></script>
-  <script src="{% static 'css/assets/js/misc.js' %}"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page -->
-  <script src="{% static 'css/assets/js/dashboard.js' %}"></script>
-  <script src="{% static 'css/assets/js/todolist.js' %}"></script>
-  <!-- End custom js for this page -->
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script>
+    // ══════════════ MODAL ══════════════
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+    });
+
+    // ══════════════ TOAST ══════════════
+    function showToast(msg, type = 'g') {
+      const w = document.getElementById('toastWrap');
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<i class="bi bi-${type === 'g' ? 'check-circle-fill' : 'x-circle-fill'}"></i> ${msg}`;
+      w.appendChild(t);
+      setTimeout(() => t.style.opacity = '0', 2500);
+      setTimeout(() => t.remove(), 3000);
+    }
+  </script>
 </body>
 
 </html>

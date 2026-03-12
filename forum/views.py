@@ -9,16 +9,30 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/accounts/')
 def index_mhs(req):
-    forum = req.user.mahasiswa.first().nama_mitra
-
-    return redirect(f'/forum/{forum.id}')
+    pkl = Pkl.objects.filter(owner=req.user, approve=True).first()
+    forums = []
+    if pkl and pkl.nama_mitra:
+        forums = [pkl.nama_mitra]
+        
+    return render(req, 'forum/index.html', {
+        'data': forums,
+        'active_page': 'forum',
+    })
 
 @login_required(login_url='/accounts/')
 def index_dosen(req):
-    tasks = req.user.membimbing.all()
+    tasks = req.user.membimbing.select_related('nama_mitra').all()
+
+    # bikin mitra unik
+    mitra_unik = {}
+    for t in tasks:
+        mitra_unik[t.nama_mitra.id] = t
+
+    tasks = mitra_unik.values()
+
     form_input = forms.ForumForm()
 
-    if req.POST:
+    if req.method == "POST":
         form_input = forms.ForumForm(req.POST, req.FILES)
         if form_input.is_valid():
             form_input.instance.owner = req.user
@@ -28,7 +42,8 @@ def index_dosen(req):
 
     return render(req, 'forumd/index.html',{
         'data': tasks,
-        'form' : form_input,
+        'form': form_input,
+        'active_page': 'forum'
     })
 
 @login_required(login_url='/accounts/')
@@ -109,10 +124,17 @@ def detail_forum_d(req, id):
         'form_komen': form_komen,
         'form_balas': form_balas,
         'data': forum,
+        'active_page': 'forum',
     })
 
 @login_required(login_url='/accounts/')
 def detail_forum_mhs(req, id):
+    # Validasi hak akses mahasiswa ke forum mitra
+    pkl = Pkl.objects.filter(owner=req.user, approve=True, nama_mitra__id=id).first()
+    if not pkl:
+        messages.error(req, 'Anda tidak memiliki hak akses untuk masuk ke forum diskusi mitra ini.')
+        return redirect('/forum/')
+
     forum = models.Forum.objects.filter(pk=id).first()
     komen = models.Komen.objects.filter(pk=id).first()
     form_input = forms.PostingForm()
@@ -127,12 +149,12 @@ def detail_forum_mhs(req, id):
             form_input.save()
         return redirect(f'/forum/{id}')
 
-
     return render(req, 'forum/detail.html', {
         'form': form_input,
         'form_komen': form_komen,
         'form_balas': form_balas,
         'data': forum,
+        'active_page': 'forum',
     })
 
 

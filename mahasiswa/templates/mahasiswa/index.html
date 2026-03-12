@@ -1,187 +1,240 @@
-{% extends "base.html" %}
+{% extends "base_mahasiswa.html" %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}PKL Saya{% endblock %}
+{% block topbar_title %}PKL Saya{% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h3 class="page-title">
-    <span class="page-title-icon bg-gradient-primary text-white mr-2">
-      <i class="mdi mdi mdi-account-check"></i>
-    </span> Daftar Labsos </h3>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+  <div>
+    <div style="font-family:'Cabinet Grotesk',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:-.3px;">PKL
+      Saya</div>
+    <div style="font-size:.82rem;color:var(--gray400);margin-top:2px;">Kelola pengajuan Praktik Kerja Lapangan Anda
+    </div>
+  </div>
+  {% if not pkl_is_active %}
+  <button class="btn-g" onclick="openModal('modalPKL')">
+    <i class="bi bi-plus-lg"></i> Ajukan PKL Baru
+  </button>
+  {% else %}
+  <div class="chip ok" style="padding:8px 14px;background:var(--g700);color:white;font-weight:700;">
+    <i class="bi bi-check-circle-fill"></i> PKL SEDANG BERJALAN
+  </div>
+  {% endif %}
 </div>
-<div class="row" style="margin-top: 5%;">
-<button type="button" class="btn btn-rounded" data-toggle="modal" data-target="#input"
-  style="background-color:#5e7188;  color: whitesmoke; font-family: ubuntu-regular sans-serif;  margin-left: 0%; margin-bottom: 20px;">
-  <span><span>&#43;</span><b> T U L I S </b></span>
-</button>
-<div class="table-responsive" style="margin-left: 0%">
-  <table class="table table-hover" id="" width="100%" cellspacing="0">
-    <thead>
-      <tr style="background-color: #625f53; color: aliceblue;">
-        <th>No</th>
-        <th>Judul</th>
-        <th>Nama Mitra</th>
-        <th>Dosen Pembimbing</th>
-        <th>Tanggal Pelaksanaan</th>
-        <th>Jatuh tempo</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    {% for d in data %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{d.judul}}</td>
-      <td>{{d.nama_mitra}}</td>
-      <td>{{d.nama_dosen}}</td>
-      <td>{{d.tanggal_mulai}} - {{d.tanggal_selesai}}</td>
-      <td>{{d.jatuhtempo}} hari</td>
-      <td>
-        {% if d.approve == True %}
-        <span class="badge badge-success">Approved</span>
-        {% elif d.approve == False and d.reject == True %}
-        <span class="badge badge-danger">Reject</span>
-        {% elif d.reject == False and d.approve == False %}
-        <label class="badge badge-warning">Process</label>
-        {% endif %}
-      <td>
-        <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon" data-toggle="modal"
-          data-target="#detail-{{d.id}}">
-          <i class="mdi mdi-eye"></i>
-        </button>
-        <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon" data-toggle="modal"
-          data-target="#update-{{d.id}}">
-          <i class="mdi mdi-border-color"></i></button>
-        <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon" data-toggle="modal"
-          data-target="#delete-{{d.id}}">
-          <i class="mdi mdi-delete"></i></button>
-      </td>
-    </tr>
 
-    <!-- Modal Delete -->
-    <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="delete">Delete Data LAB-SOS</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+{% if data %}
+{% for d in data %}
+<div class="pkl-card">
+  <div class="pkl-top">
+    <div class="pkl-h"><i class="bi bi-briefcase-fill"></i> {{ d.judul }}</div>
+    {% if d.reject %}
+    <span class="s-pill s-rej"><span class="sdot"></span> Ditolak</span>
+    {% elif d.approve and d.approve2 %}
+    <span class="s-pill s-ok"><span class="sdot"></span> Disetujui & Aktif</span>
+    {% elif d.approve %}
+    <span class="s-pill s-info"><span class="sdot" style="background:#3b82f6;"></span> Disetujui Staf</span>
+    {% else %}
+    <span class="s-pill s-pend"><span class="sdot"></span> Menunggu Review</span>
+    {% endif %}
+  </div>
+  <div style="padding:18px 22px;">
+    <div class="info-grid">
+      <div class="ig">
+        <label>Mitra / Instansi</label>
+        <p>{{ d.nama_mitra }}</p>
+      </div>
+      <div class="ig">
+        <label>Dosen Pembimbing</label>
+        <p>{{ d.nama_dosen }}</p>
+      </div>
+      <div class="ig">
+        <label>Periode PKL</label>
+        <p>{{ d.tanggal_mulai|date:"d M Y" }} – {{ d.tanggal_selesai|date:"d M Y" }}</p>
+      </div>
+      {% if d.approve and d.approve2 and not d.reject %}
+      <div class="ig" style="grid-column:span 2;">
+        <label>Progress PKL</label>
+        <div style="margin-top:4px;">
+          <div class="prog-lbl">
+            <span>Berjalan</span>
+            <span>{{ d.jatuhtempo }} hari tersisa</span>
           </div>
-          <div class="modal-body">
-            <div class="modal-body">
-              <p> Do You want To delete
-                <strong>{{d.judul}}</strong>?</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-              No
-            </button>
-            <a href="/mahasiswa/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
+          <div class="prog-t">
+            <div class="prog-f" style="width:50%;"></div>
           </div>
         </div>
       </div>
+      {% elif d.reject %}
+      <div class="ig" style="grid-column:span 3;">
+        <label>Catatan Penolakan</label>
+        <p style="color:var(--red);">{{ d.catatan|default:"Tidak memenuhi syarat administrasi." }}</p>
+      </div>
+      {% endif %}
     </div>
 
-    <!-- Modal update -->
-    <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="update">Edit Data</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form action="/mahasiswa/{{d.id}}/update/" method="POST" class="mt-3">
-              {% csrf_token %}
-
-              <div class="form-group">
-                <label for="">Judul Proposal</label>
-                <input type="text" name="judul" value="{{d.judul}}" class="form-control mt-2">
-              </div>
-              <div class="form-group">
-                <label for="">Nama Mitra</label>
-                <input type="text" name="nama_mitra" value="{{d.nama_mitra}}" class="form-control mt-2">
-              </div>
-              <div class="form-group">
-                <label for="">Dosen</label>
-                <input type="text" name="nama_dosen" value="{{d.nama_dosen}}" class="form-control mt-2">
-              </div>
-              <div class="form-group">
-                <label for="">Tanggal Mulai</label>
-                <input type="date" name="tanggal_mulai" value="{{d.tanggal_mulai_format}}" class="form-control mt-2">
-              </div>
-              <div class="form-group">
-                <label for="">Tanggal Selesai</label>
-                <input type="date" name="tanggal_selesai" value="{{d.tanggal_selesai_format}}"
-                  class="form-control mt-2">
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-        </form>
+    {% if d.approve or d.approve2 %}
+    <div class="track-lbl">Alur Persetujuan</div>
+    <div class="track-steps" style="margin-bottom:14px;">
+      <div class="t-step done">
+        <div class="t-c"><i class="bi bi-check-lg"></i></div>
+        <div class="t-lbl">Diajukan</div>
+      </div>
+      <div class="t-step {% if d.approve or d.approve2 %}done{% else %}active{% endif %}">
+        <div class="t-c"><i class="bi bi-check-lg"></i></div>
+        <div class="t-lbl">Staf<br>Setuju</div>
+      </div>
+      <div class="t-step {% if d.approve2 %}done{% elif d.approve %}active{% endif %}">
+        <div class="t-c">{% if d.approve2 %}<i class="bi bi-check-lg"></i>{% else %}<i
+            class="bi bi-hourglass-split"></i>{% endif %}</div>
+        <div class="t-lbl">Dosen<br>Setuju</div>
+      </div>
+      <div class="t-step {% if d.approve and d.approve2 and not d.reject %}active{% endif %}">
+        <div class="t-c"><i class="bi bi-play-fill"></i></div>
+        <div class="t-lbl">PKL<br>Berjalan</div>
+      </div>
+      <div class="t-step">
+        <div class="t-c"><i class="bi bi-flag"></i></div>
+        <div class="t-lbl">Selesai</div>
       </div>
     </div>
+    {% endif %}
 
-    <!-- Modal Detail-->
-    <div class="modal fade" id="detail-{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="detail">Detail Data</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="">
-              Catatan : {{d.catatan}}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-  </table>
+    {% if not d.approve and not d.reject %}
+    <div style="display:flex;gap:8px;">
+      <button class="btn-outline"
+        onclick="openEditModal('{{ d.id }}', '{{ d.judul }}', '{{ d.tanggal_mulai_format }}', '{{ d.tanggal_selesai_format }}')">
+        <i class="bi bi-pencil"></i> Edit
+      </button>
+      <a href="/mahasiswa/{{ d.id }}/delete" class="btn-red" onclick="return confirm('Hapus PKL {{ d.judul }}?')">
+        <i class="bi bi-trash3"></i> Hapus
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card-box">
+  <div class="empty-st">
+    <i class="bi bi-briefcase"></i>
+    <p>Belum ada PKL yang diajukan.</p>
+    <button class="btn-g" style="margin-top:14px;" onclick="openModal('modalPKL')">
+      <i class="bi bi-plus-lg"></i> Ajukan PKL Sekarang
+    </button>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
 
-  <!-- Modal input -->
-  <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-md" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="input">Input Data Labsos</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+{% block modals %}
+<!-- Modal Ajukan PKL Baru -->
+<div class="modal-overlay" id="modalPKL">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title"><i class="bi bi-briefcase-fill" style="color:var(--g600);"></i> Ajukan PKL Baru</div>
+      <button class="modal-close" onclick="closeModal('modalPKL')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <form action="/mahasiswa/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin-bottom:14px;">
+          <label class="fl">Judul / Topik PKL</label>
+          <input class="fi" type="text" name="judul" placeholder="Contoh: Analisis Sosial Komunitas Pesisir" required>
         </div>
-        <div class="modal-body">
-          <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-            {% load crispy_forms_tags %}
-            {% csrf_token %}
-            {{ form|crispy }}
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Input</button>
-            </div>
-          </form>
+        <div style="margin-bottom:14px;">
+          <label class="fl">File Proposal</label>
+          <input class="fi" type="file" name="proposal" accept=".pdf,.doc,.docx" required>
         </div>
-      </div>
+        <div class="form-row-g" style="margin-bottom:14px;">
+          <div>
+            <label class="fl">Mitra / Instansi Tempat PKL</label>
+            <select class="fi" name="nama_mitra" required>
+              <option value="">-- Pilih Mitra --</option>
+              {% for f in data2 %}
+              <option value="{{ f.id }}">{{ f.nama_mitra }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="fl">Dosen Pembimbing</label>
+            <select class="fi" name="nama_dosen" required>
+              <option value="">-- Pilih Dosen --</option>
+              {% for d in dosen_list %}
+              <option value="{{ d.id }}">{{ d.get_full_name|default:d.username }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-row-g" style="margin-bottom:14px;">
+          <div>
+            <label class="fl">Tanggal Mulai</label>
+            <input class="fi" type="date" name="tanggal_mulai" required>
+          </div>
+          <div>
+            <label class="fl">Tanggal Selesai</label>
+            <input class="fi" type="date" name="tanggal_selesai" required>
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label class="fl">Catatan / Keterangan (opsional)</label>
+          <textarea class="fi" name="catatan" placeholder="Tuliskan informasi tambahan jika ada..."></textarea>
+        </div>
+        <div class="modal-foot" style="padding:0;border:none;">
+          <button type="button" class="btn-gray" onclick="closeModal('modalPKL')">Batal</button>
+          <button type="submit" class="btn-g"><i class="bi bi-send"></i> Kirim Pengajuan</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
+
+<!-- Modal Edit PKL -->
+<div class="modal-overlay" id="modalEditPKL">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title"><i class="bi bi-pencil-square" style="color:var(--g600);"></i> Edit PKL</div>
+      <button class="modal-close" onclick="closeModal('modalEditPKL')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="editPKLForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin-bottom:14px;">
+          <label class="fl">Judul PKL</label>
+          <input class="fi" type="text" name="judul" id="editJudul" required>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label class="fl">Update File Proposal (Opsional)</label>
+          <input class="fi" type="file" name="proposal" accept=".pdf,.doc,.docx">
+        </div>
+        <div class="form-row-g">
+          <div>
+            <label class="fl">Tanggal Mulai</label>
+            <input class="fi" type="date" name="tanggal_mulai" id="editMulai" required>
+          </div>
+          <div>
+            <label class="fl">Tanggal Selesai</label>
+            <input class="fi" type="date" name="tanggal_selesai" id="editSelesai" required>
+          </div>
+        </div>
+        <div class="modal-foot" style="padding:0;border:none;margin-top:16px;">
+          <button type="button" class="btn-gray" onclick="closeModal('modalEditPKL')">Batal</button>
+          <button type="submit" class="btn-g"><i class="bi bi-save"></i> Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
-{% block script %}
-{{ form.media }}
+{% block extra_js %}
+<script>
+  function openEditModal(id, judul, mulai, selesai) {
+    document.getElementById('editPKLForm').action = '/mahasiswa/' + id + '/update/';
+    document.getElementById('editJudul').value = judul;
+    document.getElementById('editMulai').value = mulai;
+    document.getElementById('editSelesai').value = selesai;
+    openModal('modalEditPKL');
+  }
+</script>
 {% endblock %}

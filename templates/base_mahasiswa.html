@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIM LABSOS v2 — {% block page_title %}Mahasiswa{% endblock %}</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="{% static 'css/base_mhs.css' %}" rel="stylesheet">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo"> <img src="{% static 'css/assets/images/UNU.png' %}" alt="Logo"></div>
+    <div><div class="sb-bn">SIM LABSOS</div><div class="sb-bs">UNU Yogyakarta · v2</div></div>
+  </div>
+  <div class="sb-user">
+    {% if user.userprofile %}
+      <div class="av">{{ user.userprofile.name|default:user.username|slice:":2"|upper }}</div>
+      <div>
+        <div class="sb-un">{{ user.userprofile.name|default:user.username }}</div>
+        <div class="sb-role">Mahasiswa</div>
+      </div>
+    {% else %}
+      <div class="av">{{ user.username|slice:":2"|upper }}</div>
+      <div>
+        <div class="sb-un">{{ user.username }}</div>
+        <div class="sb-role">Mahasiswa</div>
+      </div>
+    {% endif %}
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Menu Utama</div>
+    <a class="sb-a {% if active_page == 'pkl' %}act{% endif %}" href="/mahasiswa/">
+      <i class="bi bi-briefcase-fill"></i> PKL Saya
+    </a>
+    <a class="sb-a {% if active_page == 'logbook' %}act{% endif %}" href="/catatan/">
+      <i class="bi bi-journal-text"></i> Logbook Harian
+    </a>
+    <div class="sb-sec">Komunitas</div>
+    <a class="sb-a {% if active_page == 'forum' %}act{% endif %}" href="/forum/">
+      <i class="bi bi-chat-dots-fill"></i> Forum Diskusi
+    </a>
+    <div class="sb-sec">Akun</div>
+    <a class="sb-a {% if active_page == 'profil' %}act{% endif %}" href="/accounts/profile">
+      <i class="bi bi-person-circle"></i> Profil Saya
+    </a>
+  </nav>
+  <div class="sb-foot">
+    <a class="sb-out" href="/accounts/logout">
+      <i class="bi bi-box-arrow-left"></i> Keluar
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div class="tb-title">{% block topbar_title %}SIM LABSOS{% endblock %}</div>
+    <div class="tb-r">
+      <a class="ib" href="/accounts/profile" title="Profil Saya"><i class="bi bi-person-circle"></i></a>
+    </div>
+  </header>
+
+  <div class="page">
+    {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        {% for message in messages %}
+          showToast("{{ message }}", "{% if message.tags == 'error' %}r{% else %}g{% endif %}");
+        {% endfor %}
+      });
+    </script>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<!-- TOAST WRAPPER -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+{% block modals %}{% endblock %}
+
+<script>
+function showToast(msg, type) {
+  type = type || 'g';
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast-msg ' + type;
+  const icon = type === 'g' ? 'check-circle-fill' : type === 'r' ? 'x-circle-fill' : 'info-circle-fill';
+  t.innerHTML = '<i class="bi bi-' + icon + '"></i> ' + msg;
+  wrap.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .4s'; }, 2800);
+  setTimeout(() => t.remove(), 3200);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Tutup modal saat klik overlay
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+  });
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

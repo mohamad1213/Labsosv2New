@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Logbook PKL - {{ user.username }}</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; padding: 40px; line-height: 1.5; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 3px double #000; padding-bottom: 10px; }
+        .header h2 { margin: 0; text-transform: uppercase; }
+        .header p { margin: 5px 0; font-size: 0.9rem; }
+        
+        .info-table { width: 100%; margin-bottom: 30px; border-collapse: collapse; }
+        .info-table td { padding: 5px 0; vertical-align: top; }
+        .info-table .label { width: 180px; font-weight: bold; }
+        .info-table .colon { width: 20px; text-align: center; }
+
+        .log-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .log-table th, .log-table td { border: 1px solid #777; padding: 10px; font-size: 0.9rem; }
+        .log-table th { background-color: #f2f2f2; text-align: center; }
+        
+        .footer { margin-top: 50px; display: flex; justify-content: space-between; }
+        .signature { text-align: center; width: 250px; }
+        .signature p { margin-bottom: 80px; }
+        .signature strong { display: block; text-decoration: underline; }
+
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; }
+            @page { margin: 2cm; }
+        }
+        
+        .no-print-btn {
+            background: #16a34a; color: white; border: none; padding: 10px 20px; 
+            border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print" style="text-align: right;">
+        <button onclick="window.print()" class="no-print-btn">🖨️ Cetak ke PDF</button>
+        <button onclick="history.back()" style="background:#64748b; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">Kembali</button>
+    </div>
+
+    <div class="header">
+        <h2>Laporan Harian (Logbook)</h2>
+        <h2>Praktik Kerja Lapangan (Labsos)</h2>
+        <p>Universitas Nahdlatul Ulama Yogyakarta</p>
+    </div>
+
+    <table class="info-table">
+        <tr>
+            <td class="label">Nama Mahasiswa</td>
+            <td class="colon">:</td>
+            <td>{{ user.first_name }} {{ user.last_name|default:"" }}</td>
+        </tr>
+        <tr>
+            <td class="label">NIM (Username)</td>
+            <td class="colon">:</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td class="label">Judul PKL</td>
+            <td class="colon">:</td>
+            <td>{{ pkl.judul|default:"-" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Lokasi / Mitra</td>
+            <td class="colon">:</td>
+            <td>{{ pkl.nama_mitra.nama_mitra|default:pkl.nama_mitra|default:"-" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Periode</td>
+            <td class="colon">:</td>
+            <td>{{ pkl.tanggal_mulai|date:"d F Y" }} s/d {{ pkl.tanggal_selesai|date:"d F Y" }}</td>
+        </tr>
+    </table>
+
+    <table class="log-table">
+        <thead>
+            <tr>
+                <th width="40">No</th>
+                <th width="120">Tanggal</th>
+                <th>Kegiatan & Uraian</th>
+                <th width="80">Durasi</th>
+                <th width="100">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in cetak %}
+            <tr>
+                <td style="text-align: center;">{{ forloop.counter }}</td>
+                <td style="text-align: center;">{{ log.waktu|date:"d/m/Y" }}</td>
+                <td>
+                    <strong>{{ log.judul }}</strong><br>
+                    <span style="font-size: 0.85rem; color: #444;">{{ log.ket }}</span>
+                </td>
+                <td style="text-align: center;">{{ log.selang }} mnt</td>
+                <td style="text-align: center;">
+                    {% if log.status == 'acc' %}Disetujui{% elif log.status == 'tolak' %}Ditolak{% else %}Menunggu{% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 20px;">Belum ada catatan logbook.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div class="signature">
+            <p>Yogyakarta, {{ "now"|date:"d F Y" }}<br>Mahasiswa,</p>
+            <strong>{{ user.first_name }} {{ user.last_name|default:"" }}</strong>
+            <span>NIM: {{ user.username }}</span>
+        </div>
+        <div class="signature">
+            <p><br>Mengetahui,<br>Dosen Pembimbing,</p>
+            <strong>{{ pkl.nama_dosen.first_name }} {{ pkl.nama_dosen.last_name|default:pkl.nama_dosen.username }}</strong>
+            <span>NIP/NIDN: {{ dosen.nip|default:"-" }}</span>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{% extends "base_staf.html" %}
+{% load static %}
+
+{% block page_title %}Edit Data Dosen — {{ data.nama_dosen }}{% endblock %}
+{% block topbar_title %}Edit Data Dosen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card-box mb-4">
+            <div class="cb-head" style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="cb-title"><i class="bi bi-pencil-square" style="color:var(--g600);"></i> Perbarui Informasi Dosen</div>
+                <div style="font-size:0.7rem; color:var(--gray400); font-weight:800; font-family:monospace;">ID #{{ data.id }}</div>
+            </div>
+            
+            <form action="" method="post" style="padding:15px;" id="updateForm">
+                {% csrf_token %}
+                
+                <div style="background:var(--gray50); padding:20px; border-radius:15px; border:1px solid var(--gray200); margin-bottom:20px;">
+                    <div style="font-weight:800; font-size:0.85rem; color:var(--g700); margin-bottom:15px; text-transform:uppercase; letter-spacing:0.5px;"><i class="bi bi-card-list"></i> Profil Akademik</div>
+                    
+                    <div class="form-group mb-3">
+                        <label style="font-size:0.75rem; font-weight:700; color:var(--gray600); margin-bottom:6px; display:block;">Nama Lengkap Dosen</label>
+                        <input type="text" name="nama_dosen" class="fi" value="{{ data.nama_dosen }}" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label style="font-size:0.75rem; font-weight:700; color:var(--gray600); margin-bottom:6px; display:block;">NIDN / NIP</label>
+                        <input type="text" name="nip" class="fi" value="{{ data.nip }}" required>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label style="font-size:0.75rem; font-weight:700; color:var(--gray600); margin-bottom:6px; display:block;">Fakultas</label>
+                            <select name="fakultas" id="id_fakultas" class="fi" required onchange="updateProdiDropdown()">
+                                <option value="">-- Pilih Fakultas --</option>
+                                <option value="Fakultas Teknologi Informasi" {% if data.fakultas == "Fakultas Teknologi Informasi" %}selected{% endif %}>Fakultas Teknologi Informasi</option>
+                                <option value="Fakultas Ekonomi" {% if data.fakultas == "Fakultas Ekonomi" %}selected{% endif %}>Fakultas Ekonomi</option>
+                                <option value="Fakultas Pendidikan" {% if data.fakultas == "Fakultas Pendidikan" %}selected{% endif %}>Fakultas Pendidikan</option>
+                                <option value="Fakultas Dirasah Islamiyah" {% if data.fakultas == "Fakultas Dirasah Islamiyah" %}selected{% endif %}>Fakultas Dirasah Islamiyah</option>
+                                <option value="Fakultas Industri Halal" {% if data.fakultas == "Fakultas Industri Halal" %}selected{% endif %}>Fakultas Industri Halal</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label style="font-size:0.75rem; font-weight:700; color:var(--gray600); margin-bottom:6px; display:block;">Program Studi / Jurusan</label>
+                            <select name="jurusan" id="id_jurusan" class="fi" required>
+                                <option value="{{ data.jurusan }}">{{ data.jurusan }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:var(--gray50); padding:20px; border-radius:15px; border:1px solid var(--gray200); margin-bottom:24px;">
+                    <div style="font-weight:800; font-size:0.85rem; color:var(--g700); margin-bottom:15px; text-transform:uppercase; letter-spacing:0.5px;"><i class="bi bi-shield-lock"></i> Pengaturan Akun & Keamanan</div>
+                    
+                    <div class="form-group mb-3">
+                        <label style="font-size:0.75rem; font-weight:700; color:var(--gray600); margin-bottom:6px; display:block;">Email Akun</label>
+                        <input type="email" name="email" class="fi" value="{{ data.owner.email }}" placeholder="Masukkan email aktif..." required>
+                        <div style="font-size:0.7rem; color:var(--gray400); margin-top:5px; font-style:italic;">Email digunakan untuk pemberitahuan dan pemulihan akun.</div>
+                    </div>
+
+                    <div style="background:white; border-radius:12px; border:1px dashed var(--gray300); padding:15px; display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+                        <div>
+                            <div style="font-size:0.85rem; font-weight:700; color:var(--text-main);">Reset Kata Sandi?</div>
+                            <div style="font-size:0.75rem; color:var(--gray500);">Lupa password? Reset ke default (NIDN).</div>
+                        </div>
+                        <button type="button" class="btn-gray" style="font-size:0.75rem; padding:6px 14px; background:var(--gray50); border-color:var(--gray200); color:var(--red);" 
+                                onclick="if(confirm('Reset password {{ data.nama_dosen }} menjadi NIDN beliau?')) window.location.href='/dosens/{{ data.id }}/reset-password/'">
+                            <i class="bi bi-key-fill"></i> Reset Password
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button type="submit" class="btn-g" style="flex:1.5; padding:12px; font-size:1rem; font-weight:700; border-radius:12px;">
+                        <i class="bi bi-save-fill"></i> Simpan Perubahan
+                    </button>
+                    <a href="/dosens/" class="btn-gray" style="flex:1; text-decoration:none; text-align:center; padding:12px; font-size:1rem; font-weight:600; border-radius:12px; background:white;">
+                        Batal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const facultyStudyMap = {
+        'Fakultas Teknologi Informasi': ['Informatika', 'Teknik Elektro', 'Teknik Komputer'],
+        'Fakultas Ekonomi': ['Manajemen', 'Akuntansi'],
+        'Fakultas Pendidikan': ['Pendidikan Bahasa Inggris', 'Pendidikan Guru Sekolah Dasar'],
+        'Fakultas Dirasah Islamiyah': ['Studi Islam Interdisipliner'],
+        'Fakultas Industri Halal': ['Agribisnis', 'Farmasi', 'Teknologi Hasil Pertanian']
+    };
+
+    function updateProdiDropdown(selectedProdi = null) {
+        const facultySelect = document.getElementById('id_fakultas');
+        const prodiSelect = document.getElementById('id_jurusan');
+        if(!facultySelect || !prodiSelect) return;
+
+        const faculty = facultySelect.value;
+        const studies = facultyStudyMap[faculty] || [];
+
+        // Clear and add placeholder
+        prodiSelect.innerHTML = '<option value="">-- Pilih Program Studi --</option>';
+        
+        studies.forEach(study => {
+            const opt = document.createElement('option');
+            opt.value = study;
+            opt.textContent = study;
+            if(selectedProdi && study === selectedProdi) opt.selected = true;
+            prodiSelect.appendChild(opt);
+        });
+    }
+
+    // Initial load to setup prodi choices based on current faculty
+    document.addEventListener('DOMContentLoaded', () => {
+        updateProdiDropdown("{{ data.jurusan }}");
+    });
+</script>
+
+<style>
+    .fi { width: 100%; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--gray200); outline: none; transition: all 0.3s ease; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+    .fi:focus { border-color: var(--g500); box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.12); }
+    .fi::placeholder { font-weight: 500; color: var(--gray300); }
+</style>
+{% endblock %}

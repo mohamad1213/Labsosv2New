@@ -1,162 +1,223 @@
 {% extends "base_staf.html" %}
 {% load static %}
 
+{% block page_title %}SIM LABSOS v2 — Data Dosen{% endblock %}
+{% block topbar_title %}Data Dosen Pembimbing{% endblock %}
+
 {% block content %}
-<div class="container-fluid" style="padding: 5px;">
-  <button type="button" class="btn-primary" onclick="history.back();"><i class="fas fa-arrow-left"></i> Preview</button>
-    <h4 class="mt-4" style="text-align: center; margin-bottom: 30px;">DATA DOSEN</h4>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table" id="dataTable" width="100%" cellspacing="2">
-                    <button type="button" class="btn btn-warning mb-4 rounded-pill" data-toggle="modal"
-                        data-target="#input" style="background-color:rgb(255, 214, 0); color: black; margin-top: 10px;">
-                        <span><span>&#43;</span><b> I N P U T </b></span>
-                    </button>
-                    <thead>
-                        <tr style="background-color: #625f53; color: aliceblue;">
+<div class="pg-header">
+    <div>
+        <div class="pg-title">Data Dosen</div>
+        <div class="pg-sub">Manajemen akun dan data dosen pembimbing</div>
+    </div>
+    <button class="btn-g" onclick="openModal('modalAddDosen')">
+        <i class="bi bi-person-plus-fill"></i> Tambah Dosen
+    </button>
+</div>
 
-                            <th scope="col">No</th>
-                            <th scope="col">Nama Dosen</th>
-                            <th scope="col">NIP</th>
-                            <th scope="col">Fakultas</th>
-                            <th scope="col">Jurusan</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        {% for d in data %}
-                    </tr>
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td><a href="/dosens/{{d.id}}">{{d.nama_dosen}}</a></td>
-                        <td>{{d.nip}}</td>
-                        <td>{{d.fakultas}}</td>
-                        <td>{{d.jurusan}}</td>
-                        <td>
-                            <button type="button" class="btn btn-warning" data-toggle="modal"
-                                data-target="#update-{{d.id}}" style="background-color:rgb(255, 214, 0);">
-                                <i class="fas fa-pen"></i></button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal"
-                                data-target="#delete-{{d.id}}">
-                                <i class="fas fa-trash-alt"></i></i></button>
-                        </td>
-                    </tr>
-                    </ol>
-
-
-                    <!-- Modal update -->
-                    <div class="modal fade" id="update-{{d.id}}" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="update">Edit Data</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <form action="/dosens/{{d.id}}/update/" method="POST" class="mt-3">
-                                    {% csrf_token %}
-
-                                    <div class="form-group">
-                                        <label for="">Nama Dosen</label>
-                                        <input type="text" name="nama_dosen" value="{{d.nama_dosen}}"
-                                            class="form-control mt-2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">NIP</label>
-                                        <input type="text" name="nip" value="{{d.nip}}" class="form-control mt-2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Fakultas</label>
-                                        <input type="text" name="fakultas" value="{{d.fakultas}}"
-                                            class="form-control mt-2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Jurusan</label>
-                                        <input type="text" name="jurusan" value="{{d.jurusan}}"
-                                            class="form-control mt-2">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal Delete -->
-                    <div class="modal fade" id="delete-{{d.id}}" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="delete">Delete Data Dosen</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="modal-body">
-                                        <p> Do You want To delete
-                                            <strong>{{d.nama_dosen}}</strong>?</p>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn" type="button" data-dismiss="modal" aria-label="Close">
-                                        No
-                                    </button>
-                                    <a href="/dosens/{{d.id}}/delete" type="submit" class="btn btn-danger">Yes</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <!-- Modal Input -->
-                    <div class="modal fade" id="input" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="input">Input Data Dosen</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="" method="post" class="mt-3" enctype="multipart/form-data">
-                                        {% load crispy_forms_tags %}
-                                        {% csrf_token %}
-                                        {{ form|crispy }}
-                                        {{ form_user|crispy }}
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Input</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </table>
-            </div>
-        </div>
+<!-- FILTER BAR -->
+<div class="filter-bar">
+    <div class="search-wrap">
+        <i class="bi bi-search" style="color:var(--gray400);font-size:.85rem;flex-shrink:0;"></i>
+        <input type="text" id="searchInput" placeholder="Cari nama dosen atau NIDN..." oninput="applyFilters()">
+    </div>
+    <div class="filter-chips">
+        <span class="fchip active all">Semua <span class="count-badge" id="bdgAll">{{ data|length }}</span></span>
     </div>
 </div>
 
-{% endblock %}
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-    crossorigin="anonymous"></script>
-</body>
+<div class="pkl-grid" id="dosenGrid">
+    {% for d in data %}
+    <div class="pkl-card dosen-item" data-name="{{ d.nama_dosen|lower }} {{ d.nip }} {{ d.jurusan|lower }}">
+        <div class="card-body">
+            <div class="card-mhs">
+                <div class="card-av"
+                    style="background: linear-gradient(135deg, var(--g700), var(--g400)); font-size: 1.1rem; color: white;">
+                    {{ d.nama_dosen|slice:":2"|upper }}
+                </div>
+                <div style="flex:1;min-width:0;">
+                    <a href="/dosens/{{d.id}}/detail/" style="text-decoration:none;">
+                    <div class="card-mhs-name" style="color:var(--text-main); font-weight:700;">{{ d.nama_dosen }}</div>
+                    </a>
+                    <div class="card-mhs-nim">NIDN: {{ d.nip }}</div>
+                </div>
+            </div>
 
-</html>
+            <div class="card-detail">
+                <div class="card-row">
+                    <span class="card-row-label">Fakultas</span>
+                    <span class="card-row-val" style="font-size:0.75rem;">{{ d.fakultas }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-row-label">Prodi</span>
+                    <span class="card-row-val" style="font-weight:700; color:var(--g700);">{{ d.jurusan }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-row-label">Akun User</span>
+                    <span class="card-row-val">
+                        {% if d.owner %}
+                            <span class="badge bg-success-subtle text-success" style="font-size:0.65rem;">
+                                <i class="bi bi-check-circle-fill"></i> @{{ d.owner.username }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger-subtle text-danger" style="font-size:0.65rem;">
+                                <i class="bi bi-x-circle-fill"></i> No Account
+                            </span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-foot">
+            <div class="card-foot-left" style="display:flex;gap:6px;width:100%;">
+                <a href="/dosens/{{d.id}}/detail/" class="btn-gray" style="flex:1;text-decoration:none;text-align:center;padding:7px;font-size:.78rem; background:white;">
+                    <i class="bi bi-eye"></i> Detail
+                </a>
+                <a href="/dosens/{{d.id}}/update/" class="btn-gray" style="flex:1;text-decoration:none;text-align:center;padding:7px;font-size:.78rem; background:white;">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <button type="button" class="btn-gray" title="Hapus Dosen" style="padding:7px; background:white; color:var(--red);"
+                    onclick="openModal('deleteDsn-{{d.id}}')">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Delete Dosen -->
+    <div class="modal-overlay" id="deleteDsn-{{d.id}}">
+        <div class="modal-box sm text-center">
+            <div class="modal-head">
+                <div class="modal-title" style="color:var(--red);">
+                    Hapus Data Dosen
+                </div>
+                <button type="button" class="modal-close" onclick="closeModal('deleteDsn-{{d.id}}')"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body" style="padding:30px 20px;">
+                <div style="width:68px;height:68px;background:#fef2f2;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;">
+                    <i class="bi bi-person-x-fill" style="font-size:1.9rem;color:var(--red);"></i>
+                </div>
+                <div style="font-weight:800;color:var(--gray800);margin-bottom:8px;">Hapus {{ d.nama_dosen }}?</div>
+                <div style="font-size:.85rem;color:var(--gray500);line-height:1.6;">
+                    Data profil dan akun user terkait akan dihapus secara permanen.
+                </div>
+            </div>
+            <div class="modal-foot" style="justify-content:center;">
+                <button type="button" class="btn-gray" onclick="closeModal('deleteDsn-{{d.id}}')">Batal</button>
+                <a href="/dosens/{{d.id}}/delete/" class="btn-red"><i class="bi bi-trash3"></i> Ya, Hapus</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <div class="empty-ic"><i class="bi bi-person-x" style="font-size:2rem;color:var(--gray400);"></i></div>
+        <div style="font-weight:900;color:var(--gray700);margin-bottom:6px;">Belum Ada Data Dosen</div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal Tambah Dosen -->
+<div class="modal-overlay" id="modalAddDosen">
+    <div class="modal-box" style="max-width:550px;">
+        <div class="modal-head">
+            <div class="modal-title">Tambah Dosen Pembimbing</div>
+            <button type="button" class="modal-close" onclick="closeModal('modalAddDosen')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            <div class="modal-body">
+                <div style="background:var(--gray50); padding:16px; border-radius:12px; border:1px solid var(--gray200); margin-bottom:20px;">
+                    <div style="font-weight:800; font-size:0.9rem; color:var(--g700); margin-bottom:12px;"><i class="bi bi-person-badge"></i> Data Akun</div>
+                    {{ form_user.as_p }}
+                </div>
+
+                <div style="background:var(--gray50); padding:16px; border-radius:12px; border:1px solid var(--gray200);">
+                    <div style="font-weight:800; font-size:0.9rem; color:var(--g700); margin-bottom:12px;"><i class="bi bi-card-list"></i> Profil Dosen</div>
+                    {{ form.as_p }}
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn-gray" onclick="closeModal('modalAddDosen')">Batal</button>
+                <button type="submit" class="btn-g"><i class="bi bi-person-plus-fill"></i> Simpan Dosen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ══════════════ SEARCH & FILTER ══════════════
+    function applyFilters() {
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.dosen-item');
+        let visible = 0;
+        
+        cards.forEach((card, i) => {
+            const show = !q || card.dataset.name.includes(q);
+            card.classList.toggle('hidden', !show);
+            if(show) {
+                visible++;
+                card.style.animation = 'none';
+                card.offsetHeight; // reflow
+                card.style.animation = `cardIn .3s ease both ${visible * 0.03}s`;
+            }
+        });
+        
+        const badge = document.getElementById('bdgAll');
+        if(badge) badge.textContent = visible;
+    }
+    
+    // Keyframes for animation
+    const kf = document.createElement('style');
+    kf.innerHTML = `@keyframes cardIn { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }`;
+    document.head.appendChild(kf);
+
+    // ══════════════ DYNAMIC PRODI DROP DOWN ══════════════
+    const facultyStudyMap = {
+        'Fakultas Teknologi Informasi': ['Informatika', 'Teknik Elektro', 'Teknik Komputer'],
+        'Fakultas Ekonomi': ['Manajemen', 'Akuntansi'],
+        'Fakultas Pendidikan': ['Pendidikan Bahasa Inggris', 'Pendidikan Guru Sekolah Dasar'],
+        'Fakultas Dirasah Islamiyah': ['Studi Islam Interdisipliner'],
+        'Fakultas Industri Halal': ['Agribisnis', 'Farmasi', 'Teknologi Hasil Pertanian']
+    };
+
+    function updateProdiDropdown(facultySelectId, prodiSelectId) {
+        const facultySelect = document.getElementById(facultySelectId);
+        const prodiSelect = document.getElementById(prodiSelectId);
+        if(!facultySelect || !prodiSelect) return;
+
+        const faculty = facultySelect.value;
+        const studies = facultyStudyMap[faculty] || [];
+
+        // Clear and add default
+        prodiSelect.innerHTML = '<option value="">-- Pilih Program Studi --</option>';
+        
+        studies.forEach(study => {
+            const opt = document.createElement('option');
+            opt.value = study;
+            opt.textContent = study;
+            prodiSelect.appendChild(opt);
+        });
+    }
+
+    // Initialize listeners after DOM loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const facultySelect = document.getElementById('id_fakultas');
+        if(facultySelect) {
+            facultySelect.addEventListener('change', () => updateProdiDropdown('id_fakultas', 'id_jurusan'));
+        }
+    });
+
+    // Custom CSS for forms inside modal
+    const style = document.createElement('style');
+    style.innerHTML = `
+        #modalAddDosen p { margin-bottom: 12px; }
+        #modalAddDosen label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--gray600); margin-bottom: 5px; text-transform: uppercase; }
+        #modalAddDosen input, #modalAddDosen select { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--gray200); font-size: 0.85rem; font-family: inherit; }
+        #modalAddDosen input:focus, #modalAddDosen select:focus { outline: none; border-color: var(--g500); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1); }
+        .helptext { font-size: 0.7rem; color: var(--gray400); font-style: italic; display: block; margin-top: 4px; }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}
