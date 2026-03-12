@@ -128,14 +128,17 @@ Akses secara lokal aplikasi melalui peramban (Web Browser) di alamat server:
 
 Berikut adalah beberapa tampilan dari aplikasi SIM LABSOS:
 
-![Halaman Login](media/screenshots/login.png)
+![Halaman Login](./screenshots/login.png)
 *Gambar 1: Halaman Login*
 
-![Dashboard Mahasiswa](media/screenshots/dashboard_mahasiswa.png)
+![Dashboard Mahasiswa](./screenshots/mahasiswa_dashboard.png)
 *Gambar 2: Dashboard Mahasiswa*
 
-![Halaman Forum Diskusi](media/screenshots/forum_diskusi.png)
-*Gambar 3: Halaman Forum Diskusi*
+![Dashboard Mahasiswa](./screenshots/dosen_dashboard.png)
+*Gambar 3: Dashboard Dosen*
+
+![Dashboard Mahasiswa](./screenshots/dashboard_staf.png)
+*Gambar 4: Dashboard LPPM/STAF*
 
 ---
 
