@@ -54,51 +54,148 @@
         <div class="cb-title"><i class="bi bi-activity"></i> Aktivitas Terbaru</div><a href="/mahasiswas/"
           class="lm">PKL <i class="bi bi-arrow-right"></i></a>
       </div>
-      <div id="dashFeed"></div>
+      <div id="dashFeed">
+        {% for act in latest_activities %}
+        <div class="fi">
+          <div class="f-ic" 
+               style="background: {% if act.reject or act.reject2 %}#fef2f2{% elif act.approve2 %}var(--g100){% else %}#fef3c7{% endif %};
+                      color: {% if act.reject or act.reject2 %}var(--red){% elif act.approve2 %}var(--g700){% else %}#d97706{% endif %};">
+            <i class="bi {% if act.reject or act.reject2 %}bi-x-lg{% elif act.approve2 %}bi-check-lg{% else %}bi-clock{% endif %}"></i>
+          </div>
+          <div>
+            <div class="f-tx">
+              <strong>{{ act.owner.get_full_name|default:act.owner.username }}</strong> — 
+              {% if act.reject or act.reject2 %}PKL ditolak
+              {% elif act.approve2 %}PKL disetujui
+              {% else %}mengajukan PKL baru{% endif %}
+            </div>
+            <div class="f-ti">{{ act.create_time|date:"d M · H:i" }}</div>
+          </div>
+        </div>
+        {% empty %}
+        <div style="padding: 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada aktivitas.</div>
+        {% endfor %}
+      </div>
     </div>
+
     <div class="card-box">
       <div class="cb-head">
         <div class="cb-title"><i class="bi bi-building"></i> Mitra</div><a href="/mitra/" class="lm">Kelola <i
             class="bi bi-arrow-right"></i></a>
       </div>
-      <div id="dashMitra"></div>
+      <div id="dashMitra">
+        {% for m in mitra_list %}
+        <div class="mitem">
+          <div class="m-ic" style="background:#eff6ff;color:var(--blue);">🏛️</div>
+          <div>
+            <div class="m-nm2">{{ m.nama_mitra }}</div>
+            <div class="m-in">PIC: {{ m.pic }}</div>
+          </div>
+        </div>
+        {% empty %}
+        <div style="padding: 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada mitra.</div>
+        {% endfor %}
+      </div>
     </div>
+
     <div class="card-box">
       <div class="cb-head">
         <div class="cb-title"><i class="bi bi-person-badge-fill"></i> Dosen</div><a href="/dosens/" class="lm">Kelola <i
             class="bi bi-arrow-right"></i></a>
       </div>
-      <div id="dashDosen"></div>
+      <div id="dashDosen">
+        {% for d in dosen_list %}
+        <div class="mitem">
+          <div class="m-av" style="background: linear-gradient(135deg,#7c3aed,#a78bfa);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:.77rem;font-weight:700;color:white;flex-shrink:0;">
+            {{ d.nama_dosen|slice:":2"|upper }}
+          </div>
+          <div>
+            <div class="m-nm2">{{ d.nama_dosen }}</div>
+            <div class="m-in">{{ d.jurusan }}</div>
+          </div>
+        </div>
+        {% empty %}
+        <div style="padding: 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada dosen.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card-box">
+        <div class="cb-head">
+          <div class="cb-title"><i class="bi bi-building"></i> Latest Logbook</div><a href="/mitra/" class="lm">Kelola <i
+              class="bi bi-arrow-right"></i></a>
+        </div>
+        <div id="dashMitra">
+          {% for m in latest_activities %}
+          <div class="mitem">
+            <div class="m-ic" style="background:#eff6ff;color:var(--blue);">🏛️</div>
+             <table class="mitra-table">
+              <thead>
+                <tr>
+                  <th>Owner</th>
+                  <th>Waktu</th>
+                  <th>Judul</th>
+                  <th>Status</th>
+                  <th>Selang</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for m in latest_activities %}
+                <tr>
+                  <td>
+                    <div class="owner-cell">
+                      <span class="icon">🏛️</span>
+                      {{ m.owner.get_full_name|default:m.owner.username }}
+                    </div>
+                  </td>
+                  <td>{{ m.waktu|date:"d M · H:i" }}</td>
+                  <td>{{ m.judul }}</td>
+                  <td>
+                    <span class="status">{{ m.status }}</span>
+                  </td>
+                  <td>{{ m.selang }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            
+          </div>
+          {% empty %}
+          <div style="padding: 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada mitra.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-box">
+        <div class="cb-head">
+          <div class="cb-title"><i class="bi bi-person-badge-fill"></i> Dosen</div><a href="/dosens/" class="lm">Kelola <i
+              class="bi bi-arrow-right"></i></a>
+        </div>
+        <div id="dashDosen">
+          {% for d in dosen_list %}
+          <div class="mitem">
+            <div class="m-av" style="background: linear-gradient(135deg,#7c3aed,#a78bfa);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:.77rem;font-weight:700;color:white;flex-shrink:0;">
+              {{ d.nama_dosen|slice:":2"|upper }}
+            </div>
+            <div>
+              <div class="m-nm2">{{ d.nama_dosen }}</div>
+              <div class="m-in">{{ d.jurusan }}</div>
+            </div>
+          </div>
+          {% empty %}
+          <div style="padding: 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada dosen.</div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
-  const feedItems = [
-    { ic: 'bi-check-lg', bg: 'var(--g100)', c: 'var(--g700)', txt: '<strong>Ahmad Syaifullah</strong> — PKL disetujui', time: '08 Mar · 10:32' },
-    { ic: 'bi-clock', bg: '#fef3c7', c: '#d97706', txt: '<strong>Budi Kurniawan</strong> mengajukan PKL baru', time: '08 Mar · 09:15' },
-    { ic: 'bi-building', bg: 'var(--g100)', c: 'var(--g700)', txt: 'Mitra baru <strong>BKKBN DIY</strong> ditambahkan', time: '07 Mar · 14:20' },
-    { ic: 'bi-x-lg', bg: '#fef2f2', c: 'var(--red)', txt: '<strong>Dewi Wulandari</strong> — PKL ditolak', time: '07 Mar · 11:05' },
-  ];
-
-  const mitraData = [
-    { id: 1, nama: 'Dinas Sosial Sleman', pic: 'Pak Eko', mhs: 3, emo: '🏛️', bg: '#eff6ff', c: 'var(--blue)' },
-    { id: 2, nama: 'BPS Gunungkidul', pic: 'Bu Aini', mhs: 2, emo: '📊', bg: 'var(--g100)', c: 'var(--g700)' },
-    { id: 3, nama: 'BKKBN DIY', pic: 'Pak Iwan', mhs: 4, emo: '👨👩👧', bg: '#fef3c7', c: '#d97706' },
-  ];
-
-  const dosenData = [
-    { id: 1, nama: 'Dr. Siti Rahayu, M.Si.', init: 'SR', color: 'linear-gradient(135deg,#16a34a,#22c55e)', jur: 'Sosiologi', mhs: 8 },
-    { id: 2, nama: 'Prof. Harianto W., Ph.D.', init: 'HW', color: 'linear-gradient(135deg,#7c3aed,#a78bfa)', jur: 'Sosiologi', mhs: 6 },
-    { id: 3, nama: 'Dr. Nugroho Wicaksono', init: 'NW', color: 'linear-gradient(135deg,#2563eb,#38bdf8)', jur: 'Antropologi', mhs: 5 },
-  ];
-
-  function renderFeed() { document.getElementById('dashFeed').innerHTML = feedItems.map(f => `<div class="fi"><div class="f-ic" style="background:${f.bg};color:${f.c};"><i class="bi ${f.ic}"></i></div><div><div class="f-tx">${f.txt}</div><div class="f-ti">${f.time}</div></div></div>`).join(''); }
-  function renderDashMitra() { document.getElementById('dashMitra').innerHTML = mitraData.map(m => `<div class="mitem"><div class="m-ic" style="background:${m.bg};color:${m.c};">${m.emo}</div><div><div class="m-nm2">${m.nama}</div><div class="m-in">PIC: ${m.pic}</div></div><div class="m-ct"><i class="bi bi-people"></i>${m.mhs}</div></div>`).join(''); }
-  function renderDashDosen() { document.getElementById('dashDosen').innerHTML = dosenData.map(d => `<div class="mitem"><div class="m-av" style="background:${d.color};width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:.77rem;font-weight:700;color:white;flex-shrink:0;">${d.init}</div><div><div class="m-nm2">${d.nama}</div><div class="m-in">${d.jur}</div></div><div class="m-ct"><i class="bi bi-people"></i>${d.mhs}</div></div>`).join(''); }
-
-  renderFeed();
-  renderDashMitra();
-  renderDashDosen();
+  // Script manual rendering dihapus karena sudah di-handle oleh Django Templates
 </script>
 {% endblock %}

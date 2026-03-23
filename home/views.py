@@ -45,12 +45,25 @@ def index(req):
         
     elif group is not None and group.name == 'staf':
         # Dashboard Staf: Data Riil
-        k_total = Pkl.objects.count()
-        k_pend = Pkl.objects.filter(approve=False, reject=False).count()
-        k_appr = Pkl.objects.filter(approve=True, approve2=True).count()
-        k_rej = Pkl.objects.filter(reject=True).count()
-        k_mitra = Forum.objects.count() # Menggunakan Forum sebagai Mitra (sesuai code sebelumnya)
+        students_all = Pkl.objects.all()
+        k_total = students_all.count()
+        k_pend = students_all.filter(approve=False, reject=False).count()
+        k_appr = students_all.filter(approve=True, approve2=True).count()
+        k_rej = students_all.filter(reject=True).count()
         
+        # Ambil data Mitra dan Dosen
+        mitra_list = Forum.objects.all()
+        k_mitra = mitra_list.count()
+        dosen_list = Dosen.objects.all()
+
+        # Ambil logbook terbaru dari semua mahasiswa (untuk Staf)
+        mahasiswa_ids = students_all.values_list('owner_id', flat=True)
+        latest_logs = models.Catatan.objects.filter(owner_id__in=mahasiswa_ids).order_by('-waktu')
+        log_count = latest_logs.count()
+        
+        # Ambil aktivitas terbaru (PKL baru atau status berubah)
+        latest_activities = models.Catatan.objects.all().order_by('-waktu')[:5]
+        print(latest_activities)
         return render(req, 'staf/index.html', {
             'active_page': 'dashboard',
             'k_total': k_total,
@@ -58,6 +71,11 @@ def index(req):
             'k_appr': k_appr,
             'k_rej': k_rej,
             'k_mitra': k_mitra,
+            'log_count': log_count,
+            'latest_logs': latest_logs[:5],
+            'latest_activities': latest_activities,
+            'mitra_list': mitra_list[:5],
+            'dosen_list': dosen_list[:5],
         })
     else:
         # Dashboard Mahasiswa
@@ -109,7 +127,6 @@ def cetak(req):
     # Ambil profil dosen pembimbing jika ada
     dosen_obj = None
     if pkl_obj and pkl_obj.nama_dosen:
-        from dosen.models import Dosen
         dosen_obj = Dosen.objects.filter(owner=pkl_obj.nama_dosen).first()
 
     return render(req, 'home/cetak.html', {
@@ -137,11 +154,11 @@ def cetak_dosen(req):
 
 @login_required(login_url='/accounts/')
 def cetak_staf(req):
-    group = req.user.groups.first() #mengambil group user
-    catatans = models.Catatan.objects.all() # mengambil semua object yang ada di models Catatan
-    if group is not None and group.name == 'staf': # mendefinisikan bahwa ini adalah dosen
+    group = req.user.groups.first() 
+    cetak = [] 
+    if group is not None and group.name == 'staf':
         cetak = models.Catatan.objects.filter(owner=req.user)
-    # return redirect(f'/home/{id}')
+    
     return render(req, 'staf/cetak.html', {
         'cetak' : cetak,
     })
